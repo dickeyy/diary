@@ -4,7 +4,7 @@ import TwitterIcon from "@/public/icons/twitter.svg";
 
 export default function Footer() {
     return (
-        <footer className="absolute bottom-0 flex w-full items-center justify-between gap-4 px-8 py-4">
+        <footer className="absolute bottom-0 flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8">
             <p className="text-foreground/60 text-xs font-medium">
                 © {new Date().getFullYear()}{" "}
                 <Link
