@@ -30,10 +30,12 @@ export default function AccountDropdown() {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="flex h-fit w-full items-center justify-start gap-3 px-1 py-1 text-left"
+                        className="flex h-fit w-full items-center justify-between gap-3 px-1 py-1 text-left"
                     >
-                        <img src={user?.imageUrl} alt="" className="h-6 w-6 rounded" />
-                        {user?.username}
+                        <div className="flex flex-row items-center gap-2">
+                            <img src={user?.imageUrl} alt="" className="h-6 w-6 rounded" />
+                            {user?.username}
+                        </div>
                         <DotsHorizontalIcon className="text-foreground/60" />
                     </Button>
                 </DropdownMenuTrigger>
