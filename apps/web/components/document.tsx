@@ -20,15 +20,17 @@ import { useAuth } from "@clerk/nextjs";
 import useDocumentStore from "@/stores/document-store";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
-    const router = useRouter();
     const [doc, setDoc] = useState(document);
     const [content, setContent] = useState(doc?.content || "");
     const [isSaving, setIsSaving] = useState(false);
     const [wordCount, setWordCount] = useState(doc?.content ? doc.content.split(" ").length : 0);
     const [charCount, setCharCount] = useState(doc?.content ? doc.content.length : 0);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [docUpdatedAt, setDocUpdatedAt] = useState(doc?.updated_at);
     const [sinceUpdate, setSinceUpdate] = useState(
         new Date().getTime() - (docUpdatedAt as any) * 1000 < 10000
@@ -61,29 +63,6 @@ export default function Document({ document }: { document?: DocumentType }) {
         [content]
     );
 
-    const dd = async () => {
-        getToken().then((token: any) => {
-            deleteDoc(doc?.id || "", token || "").then(() => {
-                toast.success("Document deleted");
-                // remove the document from the array
-                useDocumentStore.setState({
-                    documents: useDocumentStore.getState().documents.filter((rdoc) => {
-                        return rdoc.id !== doc?.id;
-                    })
-                });
-                // set the selected doc to the next doc in the array
-                const nextDoc = useDocumentStore.getState().documents[0];
-                if (nextDoc) {
-                    useDocumentStore.setState({ selectedDocument: nextDoc });
-
-                    router.replace("/entry/" + nextDoc.id);
-                } else {
-                    router.replace("/entry");
-                }
-            });
-        });
-    };
-
     // Call saveContent whenever content changes
     useEffect(() => {
         if (content === doc?.content) {
@@ -114,7 +93,10 @@ export default function Document({ document }: { document?: DocumentType }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="mr-8 w-48">
-                        <DropdownMenuItem className="focus:bg-red-500/20" onSelect={dd}>
+                        <DropdownMenuItem
+                            className="focus:bg-red-500/20"
+                            onSelect={() => setIsDeleteDialogOpen(true)}
+                        >
                             <Trash2Icon className="mr-2 h-[1rem] w-[1rem]" />
                             Delete
                         </DropdownMenuItem>
@@ -142,7 +124,76 @@ export default function Document({ document }: { document?: DocumentType }) {
                 </p>
                 <ContentInput content={content || ""} setContent={setContent} />
             </div>
+
+            <ConfirmDeleteDialog
+                isOpen={isDeleteDialogOpen}
+                onStateChange={setIsDeleteDialogOpen}
+                doc={doc}
+            />
         </div>
+    );
+}
+
+function ConfirmDeleteDialog({
+    isOpen,
+    onStateChange,
+    doc
+}: {
+    isOpen: boolean;
+    onStateChange: any;
+    doc?: DocumentType;
+}) {
+    const { getToken } = useAuth();
+    const router = useRouter();
+
+    const dd = async () => {
+        getToken().then((token: any) => {
+            deleteDoc(doc?.id || "", token || "").then(() => {
+                toast.success("Document deleted");
+                // remove the document from the array
+                useDocumentStore.setState({
+                    documents: useDocumentStore.getState().documents.filter((rdoc) => {
+                        return rdoc.id !== doc?.id;
+                    })
+                });
+                // set the selected doc to the next doc in the array
+                const nextDoc = useDocumentStore.getState().documents[0];
+                if (nextDoc) {
+                    useDocumentStore.setState({ selectedDocument: nextDoc });
+
+                    router.replace("/entry/" + nextDoc.id);
+                } else {
+                    router.replace("/entry");
+                }
+            });
+        });
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onStateChange}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle className="text-lg font-semibold">
+                        Are you sure you want to delete this entry?
+                    </DialogTitle>
+                    <DialogDescription className="text-muted-foreground text-sm">
+                        This action cannot be undone.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="mt-8">
+                    <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => onStateChange(false)}
+                    >
+                        Cancel
+                    </Button>
+                    <Button variant="destructive" className="w-full" onClick={dd}>
+                        Delete
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }
 
