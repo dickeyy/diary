@@ -17,7 +17,7 @@ export default function Page() {
     }, [isSignedIn, isLoaded]);
 
     return (
-        <div className="flex max-h-screen min-h-screen flex-col items-center justify-center p-4 sm:p-12">
+        <div className="flex min-h-screen flex-col items-center justify-center overflow-y-hidden p-4 sm:p-12">
             <div className="flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-4">
                 <h1 className="text-center font-serif text-5xl font-extrabold">
                     Diary<span className="text-foreground/20 text-[18px] italic">.</span>

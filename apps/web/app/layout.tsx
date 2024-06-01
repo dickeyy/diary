@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
                 <body
                     className={cn(
-                        "bg-background min-h-screen font-sans antialiased",
+                        "bg-background min-h-screen overflow-auto font-sans antialiased",
                         fontSans.variable,
                         fontSerif.variable
                     )}
