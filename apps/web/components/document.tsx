@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import posthog from "posthog-js";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
@@ -157,6 +158,7 @@ function ConfirmDeleteDialog({
                     })
                 });
                 // set the selected doc to the next doc in the array
+                posthog.capture("document_deleted");
                 const nextDoc = useDocumentStore.getState().documents[0];
                 if (nextDoc) {
                     useDocumentStore.setState({ selectedDocument: nextDoc });

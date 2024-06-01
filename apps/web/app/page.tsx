@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import posthog from "posthog-js";
 import { useEffect } from "react";
 
 export default function Page() {
@@ -12,6 +13,7 @@ export default function Page() {
 
     useEffect(() => {
         if (isSignedIn && isLoaded) {
+            posthog.capture("home_page_authed_redirect");
             redirect("/entry");
         }
     }, [isSignedIn, isLoaded]);
@@ -25,6 +27,7 @@ export default function Page() {
                         href="https://kyle.so"
                         target="_blank"
                         className="text-foreground/20 hover:text-foreground text-[18px] italic transition-all duration-150 hover:underline"
+                        onClick={() => posthog.capture("home_page_portfolio_link_click")}
                     >
                         kyle.so
                     </Link>

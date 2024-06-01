@@ -16,6 +16,7 @@ import { useState } from "react";
 import { Code2Icon, HelpCircleIcon, LogOutIcon, MoonIcon, SettingsIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import posthog from "posthog-js";
 
 export default function AccountDropdown() {
     const { user } = useUser();
@@ -77,6 +78,7 @@ export default function AccountDropdown() {
                     <DropdownMenuItem
                         className="focus:bg-red-500/20"
                         onSelect={() => {
+                            posthog.capture("sign_out");
                             signOut();
                         }}
                     >

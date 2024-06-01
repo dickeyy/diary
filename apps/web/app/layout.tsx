@@ -3,9 +3,10 @@ import { Inter as FontSans } from "next/font/google";
 import { Averia_Serif_Libre as FontSerif } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ClerkProvider, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
+import PHProvider from "@/components/posthog-provider";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -37,27 +38,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 baseTheme: "dark" as any
             }}
         >
-            <html lang="en" suppressHydrationWarning>
-                <head />
+            <PHProvider>
+                <html lang="en" suppressHydrationWarning>
+                    <head />
 
-                <body
-                    className={cn(
-                        "bg-background min-h-screen overflow-auto font-sans antialiased",
-                        fontSans.variable,
-                        fontSerif.variable
-                    )}
-                >
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="dark"
-                        enableSystem
-                        disableTransitionOnChange
+                    <body
+                        className={cn(
+                            "bg-background min-h-screen overflow-auto font-sans antialiased",
+                            fontSans.variable,
+                            fontSerif.variable
+                        )}
                     >
-                        {children}
-                        <Toaster richColors={true} />
-                    </ThemeProvider>
-                </body>
-            </html>
+                        <ThemeProvider
+                            attribute="class"
+                            defaultTheme="dark"
+                            enableSystem
+                            disableTransitionOnChange
+                        >
+                            {children}
+                            <Toaster richColors={true} />
+                        </ThemeProvider>
+                    </body>
+                </html>
+            </PHProvider>
         </ClerkProvider>
     );
 }

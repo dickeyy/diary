@@ -12,6 +12,7 @@ import { createDocument, fetchAllDocuments } from "@/lib/doc-funcs";
 import Spinner from "./ui/spinner";
 import { Button } from "./ui/button";
 import { redirect, useRouter } from "next/navigation";
+import posthog from "posthog-js";
 
 export default function Sidebar() {
     const { documents } = useDocumentStore();
@@ -39,6 +40,7 @@ export default function Sidebar() {
                                 documents: res.documents,
                                 selectedDocument: res.documents[0]
                             });
+                            posthog.capture("document_created");
                             router.push(`/entry/${res.documents[0].id}`);
                         });
                     }
