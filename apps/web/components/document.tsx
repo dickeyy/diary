@@ -197,7 +197,7 @@ function ConfirmDeleteDialog({
                         This action cannot be undone.
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter className="mt-8">
+                <DialogFooter className="mt-8 gap-2">
                     <Button
                         variant="outline"
                         className="w-full"
