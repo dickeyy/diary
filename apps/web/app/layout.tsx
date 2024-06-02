@@ -23,11 +23,28 @@ export const metadata: Metadata = {
     metadataBase: new URL("https://diary.kyle.so"),
     title: "Diary - diary.kyle.so",
     description: "A private and secure place to keep track of your thoughts.",
+
     openGraph: {
         type: "website",
         locale: "en_US",
         url: "https://diary.kyle.so",
+        images: "/og-image.png",
+        siteName: "Diary",
+        title: "Diary - diary.kyle.so",
+        description: "A private and secure place to keep track of your thoughts."
+    },
+    twitter: {
+        card: "summary_large_image",
+        site: "@kyledickeyy",
+        creator: "@kyledickeyy",
+        title: "Diary - diary.kyle.so",
+        description: "A private and secure place to keep track of your thoughts.",
         images: "/og-image.png"
+    },
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon.ico",
+        apple: "/apple-icon.png"
     },
     keywords: [
         "diary",
@@ -48,7 +65,25 @@ export const metadata: Metadata = {
         "mental wellness",
         "mental health",
         "wellness"
-    ]
+    ],
+    alternates: {
+        canonical: "https://diary.kyle.so",
+        languages: {
+            "en-US": "https://diary.kyle.so/"
+        }
+    },
+    robots: {
+        index: true,
+        follow: true,
+        "max-snippet": -1,
+        "max-image-preview": "large",
+        "max-video-preview": -1
+    },
+    themeColor: "#1c1c1c",
+    colorScheme: "light dark",
+    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+    authors: [{ name: "Kyle", url: "https://kyle.so" }],
+    publisher: "Kyle"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
