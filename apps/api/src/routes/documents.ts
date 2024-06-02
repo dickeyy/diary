@@ -37,7 +37,6 @@ docs.ws("/ws", {
         if (message === "update content") {
             if (data.content_to_save) {
                 const doc = await updateDocumentByID(data.doc_id, data.content_to_save);
-                console.log(doc);
                 if (!doc) {
                     ws.send({
                         message: "error"
