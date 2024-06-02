@@ -21,14 +21,34 @@ const fontSerif = FontSerif({
 
 export const metadata: Metadata = {
     metadataBase: new URL("https://diary.kyle.so"),
-    title: "diary",
+    title: "Diary - diary.kyle.so",
     description: "A private and secure place to keep track of your thoughts.",
     openGraph: {
         type: "website",
         locale: "en_US",
         url: "https://diary.kyle.so",
         images: "/og-image.png"
-    }
+    },
+    keywords: [
+        "diary",
+        "kyle",
+        "diary.kyle.so",
+        "diary.kyle.so",
+        "open source",
+        "privacy",
+        "security",
+        "journal",
+        "thoughts",
+        "journaling",
+        "personal",
+        "self-care",
+        "self-reflection",
+        "mindfulness",
+        "mental health",
+        "mental wellness",
+        "mental health",
+        "wellness"
+    ]
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
