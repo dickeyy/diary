@@ -99,7 +99,7 @@ export default function Sidebar() {
 
                                 <div className="mt-4 flex h-full w-full flex-col items-start text-left">
                                     <p className="text-foreground/60 mb-2 text-sm">Entries</p>
-                                    <ScrollArea className="mb-4 h-[60vh] w-full border">
+                                    <ScrollArea className="mb-4 h-[60vh] w-full gap-1">
                                         {documents.length === 0 ? (
                                             <p className="text-foreground/40 text-sm">
                                                 No entries yet
