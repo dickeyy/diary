@@ -20,7 +20,11 @@ docs.ws("/ws", {
         message: t.String(),
         data: t.Object({
             doc_id: t.String(),
-            content_to_save: t.Optional(t.String()),
+            content_to_save: t.Optional(
+                t.String({
+                    minLength: 0
+                })
+            ),
             title: t.Optional(t.String())
         }),
         token: t.String()
@@ -35,14 +39,13 @@ docs.ws("/ws", {
         }
 
         if (message === "update content") {
-            if (data.content_to_save) {
+            if (data.content_to_save !== undefined) {
                 const doc = await updateDocumentByID(data.doc_id, data.content_to_save);
                 if (!doc) {
                     ws.send({
                         message: "error"
                     });
                 } else {
-                    console.log("success");
                     ws.send({
                         message: "success",
                         doc: doc[0]
