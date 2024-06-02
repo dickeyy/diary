@@ -38,7 +38,7 @@ export default function ContentInput({
                 autoFocus
                 onChange={(e) => setContent(e.target.value)}
                 rows={1} // Starts with a single row
-                style={{ minHeight: "85vh" }}
+                style={{ minHeight: "84vh" }}
                 maxLength={20000} // Set the maximum length of the textarea to 20,000 characters (for data size)
             />
         </div>
