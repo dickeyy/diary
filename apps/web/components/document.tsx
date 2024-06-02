@@ -129,7 +129,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </nav>
-            <div className="mt-12 flex w-full max-w-[60rem] flex-col items-start justify-start md:mx-auto md:w-full">
+            <div className="mt-10 flex w-full max-w-[60rem] flex-col items-start justify-start md:mx-auto md:w-full">
                 <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
                     {doc?.title}
                 </p>
