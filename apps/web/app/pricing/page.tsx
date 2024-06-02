@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import StripeClimateIcon from "@/public/icons/stripe-climate.svg";
 
 export default function Pricing() {
     return (
@@ -54,6 +55,22 @@ export default function Pricing() {
                         ]}
                         href="/upgrade"
                     />
+                </div>
+
+                <div className="mt-4 flex flex-row items-center justify-center gap-2">
+                    <StripeClimateIcon className="h-4 w-4" />
+
+                    <p className="text-foreground/60 text-left text-xs">
+                        1% of every transaction is contributed to removing CO
+                        <span className="text-[8px]">2</span> from the atmosphere.{" "}
+                        <Link
+                            href="https://climate.stripe.com/5I6UwT"
+                            target="_blank"
+                            className="hover:text-foreground underline transition-colors duration-150"
+                        >
+                            Learn More.
+                        </Link>
+                    </p>
                 </div>
             </div>
             <Footer />
