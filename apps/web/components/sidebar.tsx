@@ -85,7 +85,7 @@ export default function Sidebar() {
                 </aside>
 
                 {/* mobile view */}
-                <div className="fixed left-4 top-[0.75rem] z-[50] flex md:hidden">
+                <div className="fixed left-8 top-[0.75rem] z-[50] flex md:hidden">
                     <Sheet open={isSideOpen} onOpenChange={setIsSideOpen}>
                         <SheetTrigger>
                             <MenuIcon className="h-5 w-5" />
