@@ -2,6 +2,7 @@
 
 import Document from "@/components/document";
 import Spinner from "@/components/ui/spinner";
+import WebSocketDemo from "@/components/websocket";
 import useClerkSWR from "@/lib/clerk-swr";
 import useDocumentStore from "@/stores/document-store";
 import { redirect } from "next/navigation";
@@ -41,6 +42,7 @@ export default function Page({ params }: { params: { id: string } }) {
     return (
         <div className="flex h-full w-full items-center justify-center p-4 pb-8">
             <Document document={document} />
+            {/* <WebSocketDemo /> */}
         </div>
     );
 }

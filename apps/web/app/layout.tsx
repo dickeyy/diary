@@ -76,7 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             disableTransitionOnChange
                         >
                             {children}
-                            <Toaster richColors={true} />
+                            <Toaster richColors={true} position="top-right" />
                         </ThemeProvider>
                     </body>
                 </html>

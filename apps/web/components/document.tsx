@@ -13,7 +13,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import ms from "ms";
-import { Eye, EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
 import { debounce } from "lodash";
 import type { DocumentType } from "@/types/Document";
 import { useAuth } from "@clerk/nextjs";
@@ -23,24 +23,33 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import posthog from "posthog-js";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
+
+    // ws stuff
+    const [socketUrl, setSocketUrl] = useState(
+        `${process.env.NEXT_PUBLIC_API_URL?.startsWith("http://") ? "ws" : "wss"}://${process.env.NEXT_PUBLIC_API_URL?.split("://")[1]}/documents/ws`
+    );
+    const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
+        shouldReconnect: () => true
+    });
+
     const [doc, setDoc] = useState(document);
-    const [content, setContent] = useState(doc?.content || "");
+    const [content, setContent] = useState(doc?.content);
     const [isSaving, setIsSaving] = useState(false);
     const [wordCount, setWordCount] = useState(doc?.content ? doc.content.split(" ").length : 0);
     const [charCount, setCharCount] = useState(doc?.content ? doc.content.length : 0);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [docUpdatedAt, setDocUpdatedAt] = useState(doc?.updated_at);
+    const [isBlured, setIsBlured] = useState(false);
+
     const [sinceUpdate, setSinceUpdate] = useState(
         new Date().getTime() - (docUpdatedAt as any) * 1000 < 10000
             ? "just now"
             : ms(new Date().getTime() - (docUpdatedAt as any) * 1000) + " ago"
     );
-
-    const [isBlured, setIsBlured] = useState(false);
-
     const sinceCreate =
         new Date().getTime() - (doc?.created_at as any) * 1000 < 10000
             ? "just now"
@@ -49,22 +58,64 @@ export default function Document({ document }: { document?: DocumentType }) {
     // Function to save the content
     const saveContent = useCallback(
         debounce(() => {
-            setIsSaving(true);
-
             // save the content
             getToken().then((token: any) => {
-                save(doc?.id || "", content ? content : "", token || "").then(() => {
-                    setIsSaving(false);
-                    setDocUpdatedAt(new Date().getTime());
-                    setSinceUpdate("just now");
-                });
+                setIsSaving(true);
+
+                if (token) {
+                    if (content !== doc?.content) {
+                        sendJsonMessage({
+                            message: "update content",
+                            data: {
+                                doc_id: doc?.id || "",
+                                content_to_save: content ? content : ""
+                            },
+                            token: token || ""
+                        });
+
+                        // slight delay to allow the message to be sent
+                        setTimeout(() => {
+                            setIsSaving(false);
+                        }, 500);
+                    } else {
+                        setIsSaving(false);
+                    }
+                }
             });
 
             setWordCount(content?.split(" ").length || 0);
             setCharCount(content?.length || 0);
-        }, 1000), // Adjust the debounce delay as needed
-        [content]
+        }, 500), // Adjust the debounce delay as needed
+        [content, doc?.content]
     );
+
+    // handle websocket messages
+    useEffect(() => {
+        if (lastMessage !== null) {
+            if (JSON.parse(lastMessage.data).message === "success") {
+                if (JSON.parse(lastMessage.data).doc) {
+                    setDocUpdatedAt(new Date().getTime());
+                    setSinceUpdate("just now");
+                }
+            } else if (JSON.parse(lastMessage.data).message === "error") {
+                toast.error("Error saving document", {
+                    description:
+                        "Something went wrong while trying to save the document. Please try again.",
+                    duration: 5000
+                });
+                // revert the content
+                setContent(doc?.content || "");
+            } else if (JSON.parse(lastMessage.data).message === "invalid token") {
+                toast.error("Invalid token", {
+                    description:
+                        "Something went wrong while trying to authenticate. Please sign out and sign in again.",
+                    duration: 5000
+                });
+                // revert the content
+                setContent(doc?.content || "");
+            }
+        }
+    }, [lastMessage]);
 
     // Call saveContent whenever content changes
     useEffect(() => {
@@ -173,7 +224,6 @@ function ConfirmDeleteDialog({
     const dd = async () => {
         getToken().then((token: any) => {
             deleteDoc(doc?.id || "", token || "").then(() => {
-                toast.success("Document deleted");
                 // remove the document from the array
                 useDocumentStore.setState({
                     documents: useDocumentStore.getState().documents.filter((rdoc) => {

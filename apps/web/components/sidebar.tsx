@@ -33,7 +33,6 @@ export default function Sidebar() {
         const token = await getToken();
         createDocument(token || "").then((res) => {
             if (res.ok) {
-                toast.success("Document created");
                 fetchAllDocuments(token || "").then((res) => {
                     if (res.ok) {
                         // update the documents in the store
