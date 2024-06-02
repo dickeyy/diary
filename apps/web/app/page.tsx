@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import posthog from "posthog-js";
 import { useEffect } from "react";
 import Navbar from "../components/navbar";
+import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -23,6 +24,12 @@ export default function Page() {
         <div className="flex min-h-screen flex-col items-center justify-center overflow-y-hidden ">
             <Navbar active="home" />
             <div className="flex w-full max-w-[35rem] flex-1 flex-grow flex-col items-center justify-center gap-4 px-4">
+                <Badge
+                    variant="default"
+                    className="mb-4 h-fit gap-1 rounded-full border-2 border-dotted border-green-500 bg-green-500/10 px-4 py-0 text-[14px] text-green-500 hover:bg-green-500/30"
+                >
+                    Beta
+                </Badge>
                 <h1 className="text-center font-serif text-5xl font-extrabold">
                     Diary<span className="text-foreground/20 text-[18px] italic">.</span>
                     <Link
