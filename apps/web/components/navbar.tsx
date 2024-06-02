@@ -9,12 +9,7 @@ export default function Navbar({ active }: { active: "home" | "pricing" | "sign-
     const { user } = useUser();
 
     return (
-        <div
-            className="bg-card/20 fixed top-4 flex w-fit items-center justify-between rounded-full border px-1 py-1 shadow-md backdrop-blur-sm backdrop-filter"
-            style={{
-                backdropFilter: "blur(4px)"
-            }}
-        >
+        <nav className="bg-card/20 glass-blur sticky top-4 z-50 flex w-fit items-center justify-between rounded-full border p-1 shadow-md">
             <div className="flex items-center gap-1 sm:gap-2">
                 <NavbarButton isActive={active === "home"}>
                     <Link href="/">About</Link>
@@ -47,7 +42,7 @@ export default function Navbar({ active }: { active: "home" | "pricing" | "sign-
                     </>
                 )}
             </div>
-        </div>
+        </nav>
     );
 }
 
