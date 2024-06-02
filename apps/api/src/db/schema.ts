@@ -6,6 +6,7 @@ export const users = pgTable("users", {
     email: varchar("email", { length: 255 }).notNull(),
     image_url: text("image_url"),
     username: varchar("username", { length: 255 }).unique(),
+    stripe_customer_id: varchar("stripe_customer_id", { length: 255 }),
     created_at: bigint("created_at", {
         mode: "number"
     }).notNull(),

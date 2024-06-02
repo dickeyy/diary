@@ -13,10 +13,21 @@ import { UserProfile, useAuth, useUser } from "@clerk/nextjs";
 import { DotsHorizontalIcon, SunIcon } from "@radix-ui/react-icons";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Code2Icon, HelpCircleIcon, LogOutIcon, MoonIcon, SettingsIcon } from "lucide-react";
+import {
+    ArrowUpCircleIcon,
+    ArrowUpIcon,
+    Code2Icon,
+    DollarSignIcon,
+    HelpCircleIcon,
+    LogOutIcon,
+    MoonIcon,
+    SettingsIcon,
+    SparkleIcon
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import posthog from "posthog-js";
+import { redirect } from "next/navigation";
 
 export default function AccountDropdown() {
     const { user } = useUser();
@@ -50,6 +61,13 @@ export default function AccountDropdown() {
                             <SettingsIcon className="mr-2 h-[1rem] w-[1rem]" />
                             Account Settings
                         </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href="/billing">
+                                <DollarSignIcon className="mr-2 h-[1rem] w-[1rem]" />
+                                Billing
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                             className="gap-2"
                             onSelect={() => {
@@ -74,6 +92,20 @@ export default function AccountDropdown() {
                             Support
                         </Link>
                     </DropdownMenuItem>
+                    {user?.publicMetadata.plan === "free" && (
+                        <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                asChild
+                                className="bg-yellow-500 text-black focus:bg-yellow-500/80 focus:text-black"
+                            >
+                                <Link href="/billing">
+                                    <ArrowUpCircleIcon className="mr-2 h-[1rem] w-[1rem]" />
+                                    Upgrade
+                                </Link>
+                            </DropdownMenuItem>
+                        </>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="focus:bg-red-500/20"
@@ -102,5 +134,11 @@ function AccountSettingsDialog({ isOpen, onStateChange }: { isOpen: boolean; onS
                 <UserProfile routing="hash" />
             </DialogContent>
         </Dialog>
+    );
+}
+
+function getPortalLink(customerID: string) {
+    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/portal/${customerID}`).then((res) =>
+        res.json()
     );
 }

@@ -8,7 +8,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <SignedIn>
-                <div className="flex min-h-screen items-center justify-center p-12 sm:p-4">
+                {/* desktop view */}
+                <div className="hidden md:grid md:grid-cols-[auto,1fr]">
+                    <div className="sticky top-0 z-50 flex h-screen w-full max-w-72 items-center justify-center ">
+                        <Sidebar />
+                    </div>
+                    <div className="flex min-h-screen w-full items-center justify-center">
+                        {children}
+                    </div>
+                </div>
+
+                {/* mobile view */}
+                <div className="flex min-h-screen w-full items-center justify-center px-4 pb-8 md:hidden">
                     <Sidebar />
                     {children}
                 </div>

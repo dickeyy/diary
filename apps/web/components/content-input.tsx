@@ -5,10 +5,14 @@ import { Textarea } from "./ui/textarea";
 
 export default function ContentInput({
     content,
-    setContent
+    setContent,
+    isBlured,
+    setIsBlured
 }: {
     content: string;
     setContent: (content: string) => void;
+    isBlured: boolean;
+    setIsBlured: (isBlured: boolean) => void;
 }) {
     const textAreaRef = useRef(null);
     // const [htmlContent, setHtmlContent] = useState(stringToHTML(content));
@@ -27,7 +31,9 @@ export default function ContentInput({
         <div className="flex w-full">
             <Textarea
                 ref={textAreaRef}
-                className="text-foreground/90 h-auto w-full resize-none overflow-hidden rounded-none border-0 p-0 font-serif text-[18px] font-light leading-loose shadow-none focus-visible:ring-0"
+                className={`text-foreground/90 h-auto w-full resize-none overflow-hidden rounded-none border-0 p-0 font-serif text-[18px] font-light leading-loose shadow-none focus-visible:ring-0
+                    ${isBlured ? "blur-[8px]" : ""}
+                `}
                 value={content}
                 autoFocus
                 onChange={(e) => setContent(e.target.value)}

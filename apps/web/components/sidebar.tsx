@@ -9,16 +9,18 @@ import useClerkSWR from "@/lib/clerk-swr";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { createDocument, fetchAllDocuments } from "@/lib/doc-funcs";
-import Spinner from "./ui/spinner";
 import { Button } from "./ui/button";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
+import { MenuIcon } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function Sidebar() {
     const { documents } = useDocumentStore();
     const router = useRouter();
     const { getToken } = useAuth();
     const { data, error } = useClerkSWR(`${process.env.NEXT_PUBLIC_API_URL}/documents/all`);
+    const [isSideOpen, setIsSideOpen] = useState(false);
 
     useEffect(() => {
         if (data) {
@@ -40,6 +42,7 @@ export default function Sidebar() {
                                 documents: res.documents,
                                 selectedDocument: res.documents[0]
                             });
+                            setIsSideOpen(false);
                             posthog.capture("document_created");
                             router.push(`/entry/${res.documents[0].id}`);
                         });
@@ -52,33 +55,73 @@ export default function Sidebar() {
     };
     if (documents) {
         return (
-            <aside className="bg-background fixed left-0 top-0 z-50 flex h-screen w-fit min-w-12 max-w-52 flex-col justify-between overflow-y-hidden p-4">
-                <div className="flex flex-col items-center">
-                    <Button className="w-full" variant="outline" onClick={cd}>
-                        New Entry
-                    </Button>
+            <>
+                {/* desktop view */}
+                <aside className="bg-background z-50 col-span-1 hidden h-screen w-full flex-col justify-between overflow-y-hidden p-4 md:flex">
+                    <div className="flex flex-col items-center">
+                        <Button className="w-full" variant="outline" onClick={cd}>
+                            New Entry
+                        </Button>
 
-                    <div className="mt-4 flex w-full flex-col items-start text-left">
-                        <p className="text-foreground/60 mb-2 text-sm">Entries</p>
-                        <ScrollArea className="h-[85vh] w-full pb-2">
-                            {documents.length === 0 ? (
-                                <p className="text-foreground/40 text-sm">No entries yet</p>
-                            ) : (
-                                documents.map((doc) => (
-                                    <SidebarTab
-                                        key={doc.id}
-                                        label={doc.title}
-                                        document={doc}
-                                        router={router}
-                                    />
-                                ))
-                            )}
-                        </ScrollArea>
+                        <div className="mt-4 flex w-full flex-col items-start text-left">
+                            <p className="text-foreground/60 mb-2 text-sm">Entries</p>
+                            <ScrollArea className="h-[85vh] w-full pb-2">
+                                {documents.length === 0 ? (
+                                    <p className="text-foreground/40 text-sm">No entries yet</p>
+                                ) : (
+                                    documents.map((doc) => (
+                                        <SidebarTab
+                                            key={doc.id}
+                                            label={doc.title}
+                                            document={doc}
+                                            router={router}
+                                        />
+                                    ))
+                                )}
+                            </ScrollArea>
+                        </div>
                     </div>
-                </div>
 
-                <AccountDropdown />
-            </aside>
+                    <AccountDropdown />
+                </aside>
+
+                {/* mobile view */}
+                <div className="fixed left-4 top-[0.75rem] z-[50] flex md:hidden">
+                    <Sheet open={isSideOpen} onOpenChange={setIsSideOpen}>
+                        <SheetTrigger>
+                            <MenuIcon className="h-5 w-5" />
+                        </SheetTrigger>
+                        <SheetContent side="left" className="w-full">
+                            <div className="mt-8 flex flex-col items-center justify-between gap-4">
+                                <Button className="w-full" variant="outline" onClick={cd}>
+                                    New Entry
+                                </Button>
+
+                                <div className="mt-4 flex h-full w-full flex-col items-start text-left">
+                                    <p className="text-foreground/60 mb-2 text-sm">Entries</p>
+                                    <ScrollArea className="mb-4 h-[60vh] w-full border">
+                                        {documents.length === 0 ? (
+                                            <p className="text-foreground/40 text-sm">
+                                                No entries yet
+                                            </p>
+                                        ) : (
+                                            documents.map((doc) => (
+                                                <SidebarTab
+                                                    key={doc.id}
+                                                    label={doc.title}
+                                                    document={doc}
+                                                    router={router}
+                                                />
+                                            ))
+                                        )}
+                                    </ScrollArea>
+                                </div>
+                                <AccountDropdown />
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                </div>
+            </>
         );
     } else {
         return <></>;

@@ -4,6 +4,8 @@ node_modules
 apps/web/node_modules
 apps/web/.next
 app/web/next-env.d.ts
+apps/api/node_modules
+apps/api/.env.local
 
 .env.*
 .env.local

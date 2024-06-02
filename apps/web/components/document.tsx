@@ -13,7 +13,7 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import ms from "ms";
-import { Trash2Icon } from "lucide-react";
+import { Eye, EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
 import { debounce } from "lodash";
 import type { DocumentType } from "@/types/Document";
 import { useAuth } from "@clerk/nextjs";
@@ -38,6 +38,8 @@ export default function Document({ document }: { document?: DocumentType }) {
             ? "just now"
             : ms(new Date().getTime() - (docUpdatedAt as any) * 1000) + " ago"
     );
+
+    const [isBlured, setIsBlured] = useState(false);
 
     const sinceCreate =
         new Date().getTime() - (doc?.created_at as any) * 1000 < 10000
@@ -76,8 +78,8 @@ export default function Document({ document }: { document?: DocumentType }) {
     }, [content, saveContent, doc?.content]);
 
     return (
-        <div className="flex w-full flex-col items-center justify-center pt-4">
-            <nav className="fixed top-0 flex w-full items-center justify-end gap-4 px-8 pt-4">
+        <div className="col-span-1 flex w-full flex-col items-start justify-center pt-4">
+            <nav className="bg-background fixed left-0 top-0 flex w-full items-center justify-end gap-4 px-8 py-2">
                 {isSaving ? (
                     <div className="flex flex-row items-center gap-2">
                         <Spinner className="fill-foreground/60 h-3 w-3" />
@@ -94,6 +96,14 @@ export default function Document({ document }: { document?: DocumentType }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="mr-8 w-48">
+                        <DropdownMenuItem onSelect={() => setIsBlured(!isBlured)}>
+                            {isBlured ? (
+                                <EyeIcon className="mr-2 h-[1rem] w-[1rem]" />
+                            ) : (
+                                <EyeOffIcon className="mr-2 h-[1rem] w-[1rem]" />
+                            )}
+                            {isBlured ? "Unhide" : "Hide"}
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                             className="focus:bg-red-500/20"
                             onSelect={() => setIsDeleteDialogOpen(true)}
@@ -119,11 +129,16 @@ export default function Document({ document }: { document?: DocumentType }) {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </nav>
-            <div className="mt-[0.85rem] flex w-[60%] flex-col items-start justify-start">
-                <p className="text-foreground/60 text-md mb-4 text-center font-mono font-medium">
+            <div className="mt-12 flex w-full max-w-[60rem] flex-col items-start justify-start md:mx-auto md:w-full">
+                <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
                     {doc?.title}
                 </p>
-                <ContentInput content={content || ""} setContent={setContent} />
+                <ContentInput
+                    content={content || ""}
+                    setContent={setContent}
+                    isBlured={isBlured}
+                    setIsBlured={setIsBlured}
+                />
             </div>
 
             <ConfirmDeleteDialog

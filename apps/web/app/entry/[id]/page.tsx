@@ -39,10 +39,8 @@ export default function Page({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div className="flex h-full w-full">
-            <div className="flex h-full w-full items-center justify-center p-4">
-                <Document document={document} />
-            </div>
+        <div className="flex h-full w-full items-center justify-center p-4 pb-8">
+            <Document document={document} />
         </div>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import GitHubIcon from "@/public/icons/github.svg";
 import TwitterIcon from "@/public/icons/twitter.svg";
@@ -5,7 +7,7 @@ import posthog from "posthog-js";
 
 export default function Footer() {
     return (
-        <footer className="absolute bottom-0 flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8">
+        <footer className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8">
             <p className="text-foreground/60 text-xs font-medium">
                 © {new Date().getFullYear()}{" "}
                 <Link

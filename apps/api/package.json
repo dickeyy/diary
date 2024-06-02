@@ -8,11 +8,14 @@
     "build": "bun build src/index.ts --target bun"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.9",
     "@elysiajs/cors": "^1.0.2",
+    "@grotto/logysia": "^0.1.3",
     "drizzle-orm": "^0.30.10",
     "elysia": "latest",
     "elysia-clerk": "^0.4.0",
     "postgres": "^3.4.4",
+    "stripe": "^15.8.0",
     "svix": "^1.24.0"
   },
   "devDependencies": {

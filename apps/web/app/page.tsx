@@ -7,6 +7,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import posthog from "posthog-js";
 import { useEffect } from "react";
+import Navbar from "../components/navbar";
 
 export default function Page() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -19,8 +20,9 @@ export default function Page() {
     }, [isSignedIn, isLoaded]);
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center overflow-y-hidden p-4 sm:p-12">
-            <div className="flex w-full max-w-lg flex-1 flex-col items-center justify-center gap-4">
+        <div className="flex min-h-screen flex-col items-center justify-center overflow-y-hidden ">
+            <Navbar active="home" />
+            <div className="flex w-full max-w-[35rem] flex-1 flex-grow flex-col items-center justify-center gap-4 px-4">
                 <h1 className="text-center font-serif text-5xl font-extrabold">
                     Diary<span className="text-foreground/20 text-[18px] italic">.</span>
                     <Link
@@ -39,7 +41,7 @@ export default function Page() {
 
                 <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
                     <Button className="w-full" asChild>
-                        <Link href="/sign-up">Get started</Link>
+                        <Link href="/sign-up">Get Started</Link>
                     </Button>
                     <Button variant={"outline"} className="w-full" asChild>
                         <Link href="/sign-in">Sign in</Link>
