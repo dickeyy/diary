@@ -47,10 +47,10 @@ export default function Pricing() {
                         description="For the cool user."
                         features={[
                             "Everything in the starter plan",
-                            "Toggleable entry lock",
-                            "Unlimited daily entries",
-                            "Edit entry titles",
-                            "Export to .pdf"
+                            "Toggleable entry lock - Coming soon",
+                            "Unlimited daily entries - Coming soon",
+                            "Edit entry titles - Coming soon",
+                            "Export to .pdf - Coming soon"
                         ]}
                         href="/upgrade"
                     />
