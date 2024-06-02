@@ -87,3 +87,80 @@
         width: contain;
     }
 }
+
+/* Blog */
+.blog-content {
+    @apply text-foreground/80 flex flex-col gap-3;
+}
+
+.blog-content > h1 {
+    @apply text-foreground font-serif text-4xl font-bold;
+}
+
+.blog-content > h2 {
+    @apply text-foreground mt-4 font-serif text-2xl font-bold;
+}
+
+.blog-content > h3 {
+    @apply text-xl font-bold;
+}
+
+.blog-content > ol {
+    @apply list-inside list-decimal;
+}
+
+.blog-content > ul {
+    @apply list-inside list-disc;
+}
+
+.blog-content > pre {
+    @apply bg-secondary text-card-foreground rounded-lg border p-3 text-sm shadow-sm;
+}
+
+.blog-content > pre > code {
+    @apply block;
+}
+
+.blog-content > p > code {
+    @apply bg-secondary text-card-foreground rounded-[0.3rem] border px-1 text-sm;
+}
+
+.blog-content > blockquote {
+    @apply border-primary/40 border-l-2 p-2;
+}
+
+.blog-content > blockquote > p {
+    @apply text-foreground/60 italic;
+}
+
+.blog-content > p > a {
+    @apply text-primary/60 hover:text-primary underline transition-all duration-150 ease-in-out;
+}
+
+.blog-content > p > img {
+    @apply h-auto w-full items-center justify-center rounded-lg shadow-sm;
+}
+
+.blog-content > p > img + figcaption {
+    @apply text-muted/60 text-center text-sm;
+}
+
+.blog-content > hr {
+    @apply border-primary/10 my-4;
+}
+
+.blog-content > p {
+    @apply text-foreground/80;
+}
+
+.blog-content > strong {
+    @apply text-foreground;
+}
+
+.blog-content > ul > li > strong {
+    @apply text-foreground;
+}
+
+.blog-content > ul > li > a {
+    @apply text-primary/60 hover:text-primary underline transition-all duration-150 ease-in-out;
+}

@@ -4,7 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-export default function Navbar({ active }: { active: "home" | "pricing" | "sign-up" | "sign-in" }) {
+export default function Navbar({
+    active
+}: {
+    active?: "home" | "pricing" | "sign-up" | "sign-in";
+}) {
     const { isSignedIn } = useAuth();
     const { user } = useUser();
 
