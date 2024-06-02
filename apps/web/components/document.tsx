@@ -96,7 +96,14 @@ export default function Document({ document }: { document?: DocumentType }) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="mr-8 w-48">
-                        <DropdownMenuItem onSelect={() => setIsBlured(!isBlured)}>
+                        <DropdownMenuItem
+                            onSelect={() => {
+                                setIsBlured(!isBlured);
+                                posthog.capture("document_blur", {
+                                    blurred: isBlured ? "true" : "false"
+                                });
+                            }}
+                        >
                             {isBlured ? (
                                 <EyeIcon className="mr-2 h-[1rem] w-[1rem]" />
                             ) : (
