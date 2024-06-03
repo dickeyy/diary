@@ -10,7 +10,7 @@ A private and secure place to keep your thoughts.
 - Open Source: 100% open source and free to use
 - Self Hostable: Run your own instance and get all Plus features fo free
 
-# Self Hosting 
+## Self Hosting 
 Coming soon...
 
 ## Contributing
