@@ -1,4 +1,4 @@
-# diary.kyle.so
+# <img src='https://diary.kyle.so/logo.png' alt='Diary Logo' width='30'> Diary.kyle.so
 
 A private and secure place to keep your thoughts. 
 
@@ -8,6 +8,10 @@ A private and secure place to keep your thoughts.
 - Simple: Easy to use and distraction free
 - Fast: Instantly dump your thoughts
 - Open Source: 100% open source and free to use
+- Self Hostable: Run your own instance and get all Plus features fo free
+
+# Self Hosting 
+Coming soon...
 
 ## Contributing
 Coming soon...
