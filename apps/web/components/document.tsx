@@ -129,7 +129,7 @@ export default function Document({ document }: { document?: DocumentType }) {
     }, [content, saveContent, doc?.content]);
 
     return (
-        <div className="col-span-1 flex w-full flex-col items-start justify-center pt-4">
+        <div className="col-span-1 flex w-full flex-col items-start justify-center pt-4 ">
             <nav className="bg-background fixed left-0 top-0 flex w-full items-center justify-end gap-4 px-8 py-2">
                 {isSaving ? (
                     <div className="flex flex-row items-center gap-2">

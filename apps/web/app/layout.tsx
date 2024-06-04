@@ -79,9 +79,6 @@ export const metadata: Metadata = {
         "max-image-preview": "large",
         "max-video-preview": -1
     },
-    themeColor: "#1c1c1c",
-    colorScheme: "light dark",
-    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
     authors: [{ name: "Kyle", url: "https://kyle.so" }],
     publisher: "Kyle"
 };

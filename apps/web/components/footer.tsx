@@ -8,7 +8,7 @@ import posthog from "posthog-js";
 export default function Footer() {
     return (
         <footer className="flex w-full items-center justify-between gap-4 px-4 py-4 sm:px-8">
-            <p className="text-foreground/60 text-xs font-medium">
+            <p className="text-foreground/60 text-xs font-normal">
                 © {new Date().getFullYear()}{" "}
                 <Link
                     href="https://kyle.so"
@@ -20,6 +20,20 @@ export default function Footer() {
                 </Link>
             </p>
             <div className="flex flex-row items-center gap-4">
+                <Link
+                    href="/privacy"
+                    className="hover:text-foreground text-foreground/60 text-xs font-normal transition-colors duration-150 hover:underline"
+                    onClick={() => posthog.capture("footer_privacy_click")}
+                >
+                    Privacy
+                </Link>
+                <Link
+                    href="/terms"
+                    className="hover:text-foreground text-foreground/60 text-xs font-normal transition-colors duration-150 hover:underline"
+                    onClick={() => posthog.capture("footer_terms_click")}
+                >
+                    Terms
+                </Link>
                 <Link
                     href="https://github.com/dickeyy/diary"
                     target="_blank"

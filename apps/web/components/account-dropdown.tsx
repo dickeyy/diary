@@ -28,6 +28,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import posthog from "posthog-js";
 import { redirect } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function AccountDropdown() {
     const { user } = useUser();
@@ -42,10 +43,18 @@ export default function AccountDropdown() {
                 <DropdownMenuTrigger asChild>
                     <Button
                         variant="ghost"
-                        className="flex h-fit w-full items-center justify-between gap-3 px-1 py-1 text-left"
+                        className="flex h-fit w-full items-center justify-between gap-3  px-1 py-1 pr-2 text-left"
                     >
                         <div className="flex flex-row items-center gap-2">
-                            <img src={user?.imageUrl} alt="" className="h-6 w-6 rounded" />
+                            <Avatar className="h-6 w-6">
+                                <AvatarFallback>
+                                    {user?.username ? user?.username.charAt(0) : "?"}
+                                </AvatarFallback>
+                                <AvatarImage
+                                    src={user?.imageUrl}
+                                    alt={user?.username + "'s avatar"}
+                                />
+                            </Avatar>
                             {user?.username}
                         </div>
                         <DotsHorizontalIcon className="text-foreground/60" />
@@ -134,11 +143,5 @@ function AccountSettingsDialog({ isOpen, onStateChange }: { isOpen: boolean; onS
                 <UserProfile routing="hash" />
             </DialogContent>
         </Dialog>
-    );
-}
-
-function getPortalLink(customerID: string) {
-    return fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/portal/${customerID}`).then((res) =>
-        res.json()
     );
 }
