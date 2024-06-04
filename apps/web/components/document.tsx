@@ -156,7 +156,7 @@ export default function Document({ document }: { document?: DocumentType }) {
 
     return (
         <div className="col-span-1 flex min-h-screen w-full flex-col items-start justify-start pt-4">
-            <nav className="bg-background fixed left-0 top-0 flex w-full items-center justify-end gap-4 px-8 py-2">
+            <nav className="bg-background fixed left-0 top-0 z-10 flex w-full items-center justify-end gap-4 px-8 py-2">
                 {isSaving ? (
                     <div className="flex flex-row items-center gap-2">
                         <Spinner className="fill-foreground/60 h-3 w-3" />
