@@ -16,7 +16,7 @@ export default function Editor({
 
     return (
         <Plate
-            initialValue={JSON.parse(content)}
+            initialValue={content ? JSON.parse(content) : undefined}
             onChange={(value) => {
                 setContent(JSON.stringify(value));
             }}
