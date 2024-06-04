@@ -110,6 +110,9 @@ export default function Sidebar() {
                                                     label={doc.title}
                                                     document={doc}
                                                     router={router}
+                                                    closeSidebar={() => {
+                                                        setIsSideOpen(false);
+                                                    }}
                                                 />
                                             ))
                                         )}
@@ -130,11 +133,13 @@ export default function Sidebar() {
 function SidebarTab({
     label,
     document,
-    router
+    router,
+    closeSidebar
 }: {
     label: string;
     document: DocumentType;
     router: any;
+    closeSidebar?: () => void;
 }) {
     const { selectedDocument } = useDocumentStore.getState();
     const isActive = selectedDocument?.id === document.id;
@@ -144,6 +149,9 @@ function SidebarTab({
             variant={isActive ? "secondary" : "ghost"}
             className="text-foreground/60 flex h-fit w-full items-start justify-start py-1 text-left font-normal"
             onClick={() => {
+                if (closeSidebar) {
+                    closeSidebar();
+                }
                 useDocumentStore.setState({ selectedDocument: document });
                 router.push(`/entry/${document.id}`);
             }}

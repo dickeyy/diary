@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import ContentInput from "./content-input";
+import Editor from "./editor";
 import Spinner from "./ui/spinner";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ms from "ms";
 import { EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
-import { debounce } from "lodash";
+import { debounce, set } from "lodash";
 import type { DocumentType } from "@/types/Document";
 import { useAuth } from "@clerk/nextjs";
 import useDocumentStore from "@/stores/document-store";
@@ -39,8 +39,17 @@ export default function Document({ document }: { document?: DocumentType }) {
     const [doc, setDoc] = useState(document);
     const [content, setContent] = useState(doc?.content);
     const [isSaving, setIsSaving] = useState(false);
-    const [wordCount, setWordCount] = useState(doc?.content ? doc.content.split(" ").length : 0);
-    const [charCount, setCharCount] = useState(doc?.content ? doc.content.length : 0);
+    const [wordCount, setWordCount] = useState(
+        doc?.content
+            ? JSON.parse(doc.content).map(
+                  (block: any) =>
+                      block.children
+                          .map((child: any) => child.text)
+                          .join(" ")
+                          .split(" ").length
+              )
+            : 0
+    );
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [docUpdatedAt, setDocUpdatedAt] = useState(doc?.updated_at);
     const [isBlured, setIsBlured] = useState(false);
@@ -83,8 +92,23 @@ export default function Document({ document }: { document?: DocumentType }) {
                 }
             });
 
-            setWordCount(content?.split(" ").length || 0);
-            setCharCount(content?.length || 0);
+            if (content) {
+                const blocks = JSON.parse(content);
+                // a block looks like this: { type: "p", children: [{ text: "hello world" }] }
+                // blocks is an array of these
+                // we want to count the words in each block.children.map((child) => child.text) <- basically the text in the block
+                setWordCount(
+                    blocks
+                        .map(
+                            (block: any) =>
+                                block.children
+                                    .map((child: any) => child.text)
+                                    .join(" ")
+                                    .split(" ").length
+                        )
+                        .reduce((a: any, b: any) => a + b, 0)
+                );
+            }
         }, 500), // Adjust the debounce delay as needed
         [content, doc?.content]
     );
@@ -94,8 +118,10 @@ export default function Document({ document }: { document?: DocumentType }) {
         if (lastMessage !== null) {
             if (JSON.parse(lastMessage.data).message === "success") {
                 if (JSON.parse(lastMessage.data).doc) {
+                    // update all the states
                     setDocUpdatedAt(new Date().getTime());
                     setSinceUpdate("just now");
+                    setDoc(JSON.parse(lastMessage.data).doc);
                 }
             } else if (JSON.parse(lastMessage.data).message === "error") {
                 toast.error("Error saving document", {
@@ -122,14 +148,14 @@ export default function Document({ document }: { document?: DocumentType }) {
         if (content === doc?.content) {
             return;
         }
-
         saveContent();
+
         // Cancel the debounce on component unmount
         return () => saveContent.cancel();
     }, [content, saveContent, doc?.content]);
 
     return (
-        <div className="col-span-1 flex w-full flex-col items-start justify-center pt-4 ">
+        <div className="col-span-1 flex min-h-screen w-full flex-col items-start justify-start pt-4">
             <nav className="bg-background fixed left-0 top-0 flex w-full items-center justify-end gap-4 px-8 py-2">
                 {isSaving ? (
                     <div className="flex flex-row items-center gap-2">
@@ -175,9 +201,6 @@ export default function Document({ document }: { document?: DocumentType }) {
                             <p className="text-foreground/40 flex-wrap text-xs font-medium">
                                 Word count: {wordCount.toLocaleString()}
                             </p>
-                            <p className="text-foreground/40 flex-wrap text-xs font-medium">
-                                Char count: {charCount.toLocaleString()} / 20k
-                            </p>
                             <p className="text-foreground/40 text-xs font-medium">
                                 Created {sinceCreate}
                             </p>
@@ -192,12 +215,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                 <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
                     {doc?.title}
                 </p>
-                <ContentInput
-                    content={content || ""}
-                    setContent={setContent}
-                    isBlured={isBlured}
-                    setIsBlured={setIsBlured}
-                />
+                <Editor content={content || ""} setContent={setContent} isBlured={isBlured} />
             </div>
 
             <ConfirmDeleteDialog

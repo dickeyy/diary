@@ -7,6 +7,7 @@ import {
     deleteDocumentByID
 } from "../lib/document";
 import { validateClerkToken } from "../lib/clerk";
+import { decrypt } from "../lib/crypto";
 
 const docs = new Elysia({ prefix: "/documents" });
 
@@ -48,7 +49,7 @@ docs.ws("/ws", {
                 } else {
                     ws.send({
                         message: "success",
-                        doc: doc[0]
+                        doc: doc
                     });
                 }
             } else {

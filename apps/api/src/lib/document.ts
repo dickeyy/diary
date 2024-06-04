@@ -35,32 +35,33 @@ export async function getDocumentByID(id: string, userID: string): Promise<Docum
 export async function updateDocumentByID(
     id: string,
     content: string
-): Promise<DocumentType[] | null> {
+): Promise<DocumentType | null> {
     const now = Math.floor(new Date().getTime() / 1000);
 
-    const doc = await db.select().from(documents).where(eq(documents.id, id)).execute();
+    const doc = await db.select().from(documents).where(eq(documents.id, id)).limit(1).execute();
     if (!doc) {
         return null;
     }
+
     const encryptedContent = await encrypt(content);
     if (!encryptedContent) {
         console.error("Error encrypting content");
         return null;
     }
-    const newDoc = {
-        ...doc,
-        content: encryptedContent,
-        updated_at: now
-    };
 
     try {
-        await db.update(documents).set(newDoc).where(eq(documents.id, id)).execute();
+        await db
+            .update(documents)
+            .set({ content: encryptedContent, updated_at: now })
+            .where(eq(documents.id, id))
+            .execute();
     } catch (e) {
         console.error(e);
         return null;
     }
 
-    return doc as any;
+    doc[0].content = content;
+    return doc[0] as any;
 }
 
 export async function deleteDocumentByID(id: string, userID: string): Promise<boolean> {
