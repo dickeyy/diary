@@ -19,6 +19,10 @@ const config = {
             plus: process.env.STRIPE_PLUS_PRICE_ID as string
         },
         webhookSecret: process.env.STRIPE_WEBHOOK_SECRET as string
+    },
+    logsnag: {
+        apiKey: process.env.LOGSNAG_API_KEY as string,
+        projectName: process.env.LOGSNAG_PROJECT_NAME as string
     }
 };
 

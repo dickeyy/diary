@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import posthog from "posthog-js";
+import { useLogSnag } from "@logsnag/next";
 
 export default function Navbar({
     active
@@ -99,6 +100,7 @@ function NavbarButton({
 function AccountDropdown({ user }: { user: any }) {
     const { signOut } = useAuth();
     const { setTheme, theme } = useTheme();
+    const { clearUserId } = useLogSnag();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
 
@@ -184,6 +186,7 @@ function AccountDropdown({ user }: { user: any }) {
                         className="focus:bg-red-500/20"
                         onSelect={() => {
                             posthog.capture("sign_out");
+                            clearUserId();
                             signOut();
                         }}
                     >

@@ -4,6 +4,7 @@ import { constructWHEvent, getPortalLink } from "../lib/stripe";
 import config from "../../config";
 import { updateClerkStripeMetadata } from "../lib/clerk";
 import { getUserByStripeCustomerID } from "../lib/user";
+import { logsnagUserDowngrade, logsnagUserUpgrade } from "../lib/logsnag";
 
 const stripe = new Elysia({ prefix: "/stripe" });
 
@@ -46,6 +47,10 @@ stripe.post("/webhook", async ({ set, request, headers }) => {
                     ? "free"
                     : "plus";
             await updateClerkStripeMetadata(user, newPlan);
+
+            // logsnag the subscription update
+            if (newPlan === "free") await logsnagUserDowngrade(user.id, user.username, user.email);
+            if (newPlan === "plus") await logsnagUserUpgrade(user.id, user.username, user.email);
             break;
         default:
             set.status = 400;

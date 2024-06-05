@@ -15,25 +15,24 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import {
     ArrowUpCircleIcon,
-    ArrowUpIcon,
     Code2Icon,
     DollarSignIcon,
     HelpCircleIcon,
     LogOutIcon,
     MoonIcon,
-    SettingsIcon,
-    SparkleIcon
+    SettingsIcon
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import posthog from "posthog-js";
-import { redirect } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useLogSnag } from "@logsnag/next";
 
 export default function AccountDropdown() {
     const { user } = useUser();
     const { signOut } = useAuth();
     const { setTheme, theme } = useTheme();
+    const { clearUserId } = useLogSnag();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
 
@@ -120,6 +119,7 @@ export default function AccountDropdown() {
                         className="focus:bg-red-500/20"
                         onSelect={() => {
                             posthog.capture("sign_out");
+                            clearUserId();
                             signOut();
                         }}
                     >

@@ -2,9 +2,20 @@
 
 import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
-import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import { useLogSnag } from "@logsnag/next";
+import { useEffect } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+    const { user, isSignedIn, isLoaded } = useUser();
+    const { setUserId } = useLogSnag();
+
+    useEffect(() => {
+        if (isLoaded && isSignedIn && user) {
+            setUserId(user.id);
+        }
+    }, [isLoaded, isSignedIn, user, setUserId]);
+
     return (
         <>
             <SignedIn>

@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
 import PHProvider from "@/components/posthog-provider";
+import Providers from "@/components/providers";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -92,35 +93,29 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <ClerkProvider
-            appearance={{
-                baseTheme: "dark" as any
-            }}
-        >
-            <PHProvider>
-                <html lang="en" suppressHydrationWarning>
-                    <head />
+        <Providers>
+            <html lang="en" suppressHydrationWarning>
+                <head />
 
-                    <body
-                        className={cn(
-                            "bg-background min-h-screen overflow-auto font-sans antialiased",
-                            fontSans.variable,
-                            fontSerif.variable,
-                            fontMono.variable
-                        )}
+                <body
+                    className={cn(
+                        "bg-background min-h-screen overflow-auto font-sans antialiased",
+                        fontSans.variable,
+                        fontSerif.variable,
+                        fontMono.variable
+                    )}
+                >
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="dark"
+                        enableSystem
+                        disableTransitionOnChange
                     >
-                        <ThemeProvider
-                            attribute="class"
-                            defaultTheme="dark"
-                            enableSystem
-                            disableTransitionOnChange
-                        >
-                            {children}
-                            <Toaster richColors={true} position="top-right" />
-                        </ThemeProvider>
-                    </body>
-                </html>
-            </PHProvider>
-        </ClerkProvider>
+                        {children}
+                        <Toaster richColors={true} position="top-right" />
+                    </ThemeProvider>
+                </body>
+            </html>
+        </Providers>
     );
 }

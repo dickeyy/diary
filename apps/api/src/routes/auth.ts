@@ -4,6 +4,7 @@ import config from "../../config";
 import { createUser, deleteUser, getUserByID, updateUser } from "../lib/user";
 import { createCustomer, createFreeSubscription, deleteCustomer } from "../lib/stripe";
 import { updateClerkStripeMetadata } from "../lib/clerk";
+import { logsnagAcctCreate, logsnagAcctDelete } from "../lib/logsnag";
 
 const auth = new Elysia({ prefix: "/auth" });
 
@@ -46,6 +47,9 @@ auth.post("/webhook/user", async ({ set, headers, request }) => {
                     set.status = 500;
                     return { message: "Failed to create subscription" };
                 }
+
+                // logsnag the account creation
+                await logsnagAcctCreate(user.id, user.username, user.email);
             } catch (e) {
                 console.error(e);
                 set.status = 500;
@@ -76,6 +80,9 @@ auth.post("/webhook/user", async ({ set, headers, request }) => {
                     set.status = 500;
                     return { message: "Failed to delete customer" };
                 }
+
+                // logsnag the account deletion
+                if (user) await logsnagAcctDelete(user.id);
             } catch (e) {
                 console.error(e);
                 set.status = 500;
