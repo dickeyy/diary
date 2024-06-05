@@ -65,7 +65,6 @@ docs.ws("/ws", {
                 });
             }
         } else if (message === "update metadata") {
-            console.log("update metadata");
             if (data.metadata !== undefined) {
                 const doc = await updateDocumentMetadata(data.doc_id, data.metadata);
                 if (!doc) {
