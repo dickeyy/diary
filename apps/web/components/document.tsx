@@ -201,6 +201,10 @@ export default function Document({ document }: { document?: DocumentType }) {
     useEffect(() => {
         if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
             saveMetadata();
+
+            if (metadata?.font_size !== doc?.metadata?.font_size) {
+                posthog.capture("document_font_size_change");
+            }
         }
 
         // Cancel the debounce on component unmount
@@ -235,6 +239,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
+                                            posthog.capture("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "serif"
@@ -256,6 +261,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
+                                            posthog.capture("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "sans"
@@ -277,6 +283,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
+                                            posthog.capture("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "mono"
@@ -334,9 +341,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                         <DropdownMenuItem
                             onSelect={() => {
                                 setIsBlured(!isBlured);
-                                posthog.capture("document_blur", {
-                                    blurred: isBlured ? "true" : "false"
-                                });
+                                posthog.capture("document_blur");
                             }}
                         >
                             {isBlured ? (
