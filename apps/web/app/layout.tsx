@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { Inter as FontSans } from "next/font/google";
 import { Averia_Serif_Libre as FontSerif } from "next/font/google";
+import { JetBrains_Mono as FontMono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -17,6 +18,12 @@ const fontSerif = FontSerif({
     subsets: ["latin"],
     variable: "--font-serif",
     weight: ["300", "400", "700"]
+});
+
+const fontMono = FontMono({
+    subsets: ["latin"],
+    variable: "--font-mono",
+    weight: ["300", "400", "500", "600", "700"]
 });
 
 export const metadata: Metadata = {
@@ -98,7 +105,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         className={cn(
                             "bg-background min-h-screen overflow-auto font-sans antialiased",
                             fontSans.variable,
-                            fontSerif.variable
+                            fontSerif.variable,
+                            fontMono.variable
                         )}
                     >
                         <ThemeProvider

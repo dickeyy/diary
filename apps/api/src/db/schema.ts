@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { text, pgTable, varchar, bigint } from "drizzle-orm/pg-core";
+import { text, pgTable, varchar, bigint, jsonb } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: varchar("id", { length: 36 }).primaryKey(),
@@ -29,7 +29,11 @@ export const documents = pgTable("documents", {
     }).notNull(),
     updated_at: bigint("updated_at", {
         mode: "number"
-    }).notNull()
+    }).notNull(),
+    metadata: jsonb("metadata").default({
+        font: "serif",
+        font_size: 18
+    })
 });
 
 export const documentRelations = relations(documents, ({ one }) => ({

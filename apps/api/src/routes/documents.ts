@@ -4,7 +4,8 @@ import {
     getUserDocuments,
     getDocumentByID,
     updateDocumentByID,
-    deleteDocumentByID
+    deleteDocumentByID,
+    updateDocumentMetadata
 } from "../lib/document";
 import { validateClerkToken } from "../lib/clerk";
 import { decrypt } from "../lib/crypto";
@@ -26,6 +27,12 @@ docs.ws("/ws", {
                     minLength: 0
                 })
             ),
+            metadata: t.Optional(
+                t.Object({
+                    font: t.String(),
+                    font_size: t.Number()
+                })
+            ),
             title: t.Optional(t.String())
         }),
         token: t.String()
@@ -42,6 +49,25 @@ docs.ws("/ws", {
         if (message === "update content") {
             if (data.content_to_save !== undefined) {
                 const doc = await updateDocumentByID(data.doc_id, data.content_to_save);
+                if (!doc) {
+                    ws.send({
+                        message: "error"
+                    });
+                } else {
+                    ws.send({
+                        message: "success",
+                        doc: doc
+                    });
+                }
+            } else {
+                ws.send({
+                    message: "error"
+                });
+            }
+        } else if (message === "update metadata") {
+            console.log("update metadata");
+            if (data.metadata !== undefined) {
+                const doc = await updateDocumentMetadata(data.doc_id, data.metadata);
                 if (!doc) {
                     ws.send({
                         message: "error"

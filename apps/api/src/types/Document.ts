@@ -5,4 +5,8 @@ export type DocumentType = {
     content: string | null;
     created_at: number;
     updated_at: number;
-}
+    metadata: {
+        font: string;
+        font_size: number;
+    };
+};

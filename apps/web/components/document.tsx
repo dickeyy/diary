@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ms from "ms";
 import { EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
-import { debounce, set } from "lodash";
+import { debounce, get } from "lodash";
 import type { DocumentType } from "@/types/Document";
 import { useAuth } from "@clerk/nextjs";
 import useDocumentStore from "@/stores/document-store";
@@ -23,21 +23,28 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import posthog from "posthog-js";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
+    const [token, setToken] = useState("");
 
     // ws stuff
     const [socketUrl, setSocketUrl] = useState(
         `${process.env.NEXT_PUBLIC_API_URL?.startsWith("http://") ? "ws" : "wss"}://${process.env.NEXT_PUBLIC_API_URL?.split("://")[1]}/documents/ws`
     );
     const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl, {
-        shouldReconnect: () => true
+        shouldReconnect: () => true,
+        onError: () => {
+            toast.error("Error connecting to server");
+        },
+        retryOnError: true
     });
 
     const [doc, setDoc] = useState(document);
     const [content, setContent] = useState(doc?.content);
+    const [metadata, setMetadata] = useState(doc?.metadata);
+
     const [isSaving, setIsSaving] = useState(false);
     const [wordCount, setWordCount] = useState(
         doc?.content
@@ -64,33 +71,36 @@ export default function Document({ document }: { document?: DocumentType }) {
             ? "just now"
             : ms(new Date().getTime() - (doc?.created_at as any) * 1000) + " ago";
 
+    // on mount, get the token
+    useEffect(() => {
+        getToken().then((token: any) => {
+            setToken(token);
+        });
+    }, [getToken]);
+
     // Function to save the content
     const saveContent = useCallback(
         debounce(() => {
-            // save the content
-            getToken().then((token: any) => {
-                setIsSaving(true);
-
-                if (token) {
-                    if (content !== doc?.content) {
-                        sendJsonMessage({
-                            message: "update content",
-                            data: {
-                                doc_id: doc?.id || "",
-                                content_to_save: content ? content : ""
-                            },
-                            token: token || ""
-                        });
-
-                        // slight delay to allow the message to be sent
-                        setTimeout(() => {
-                            setIsSaving(false);
-                        }, 500);
-                    } else {
-                        setIsSaving(false);
-                    }
+            if (token.length > 0) {
+                if (content !== doc?.content) {
+                    setIsSaving(true);
+                    sendJsonMessage({
+                        message: "update content",
+                        data: {
+                            doc_id: doc?.id || "",
+                            content_to_save: content ? content : ""
+                        },
+                        token: token || ""
+                    });
+                } else {
+                    setIsSaving(false);
                 }
-            });
+            } else {
+                getToken().then((token: any) => {
+                    setToken(token);
+                    saveContent();
+                });
+            }
 
             if (content) {
                 const blocks = JSON.parse(content);
@@ -113,12 +123,37 @@ export default function Document({ document }: { document?: DocumentType }) {
         [content, doc?.content]
     );
 
+    // function to save the metadata
+    const saveMetadata = useCallback(
+        debounce(() => {
+            if (token.length > 0) {
+                if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
+                    setIsSaving(true);
+                    sendJsonMessage({
+                        message: "update metadata",
+                        data: {
+                            doc_id: doc?.id || "",
+                            metadata: metadata
+                        },
+                        token: token || ""
+                    });
+                }
+            } else {
+                getToken().then((token: any) => {
+                    setToken(token);
+                });
+            }
+        }, 1000), // Adjust the debounce delay as needed
+        [metadata, doc?.metadata]
+    );
+
     // handle websocket messages
     useEffect(() => {
         if (lastMessage !== null) {
             if (JSON.parse(lastMessage.data).message === "success") {
                 if (JSON.parse(lastMessage.data).doc) {
                     // update all the states
+                    setIsSaving(false);
                     setDocUpdatedAt(new Date().getTime());
                     setSinceUpdate("just now");
                     setDoc(JSON.parse(lastMessage.data).doc);
@@ -131,28 +166,46 @@ export default function Document({ document }: { document?: DocumentType }) {
                 });
                 // revert the content
                 setContent(doc?.content || "");
+                setIsSaving(false);
             } else if (JSON.parse(lastMessage.data).message === "invalid token") {
                 toast.error("Invalid token", {
                     description:
-                        "Something went wrong while trying to authenticate. Please sign out and sign in again.",
+                        "Something went wrong while trying to authenticate. Please try again.",
                     duration: 5000
                 });
                 // revert the content
                 setContent(doc?.content || "");
+                setIsSaving(false);
             }
         }
-    }, [lastMessage]);
+    }, [
+        lastMessage,
+        setIsSaving,
+        setDocUpdatedAt,
+        setSinceUpdate,
+        setDoc,
+        setContent,
+        doc?.content
+    ]);
 
     // Call saveContent whenever content changes
     useEffect(() => {
-        if (content === doc?.content) {
-            return;
+        if (content !== doc?.content) {
+            saveContent();
         }
-        saveContent();
 
         // Cancel the debounce on component unmount
         return () => saveContent.cancel();
     }, [content, saveContent, doc?.content]);
+
+    useEffect(() => {
+        if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
+            saveMetadata();
+        }
+
+        // Cancel the debounce on component unmount
+        return () => saveMetadata.cancel();
+    }, [metadata, doc?.metadata, saveMetadata]);
 
     return (
         <div className="col-span-1 flex min-h-screen w-full flex-col items-start justify-start pt-4">
@@ -172,7 +225,112 @@ export default function Document({ document }: { document?: DocumentType }) {
                             <DotsHorizontalIcon className="fill-foreground/60 h-5 w-5" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="mr-8 w-48">
+                    <DropdownMenuContent className="mr-8 w-fit">
+                        <div className="flex w-full flex-col items-start p-1">
+                            <p className="text-foreground/40 text-xs font-medium">Font Family</p>
+                            <DropdownMenuSeparator />
+                            <div className="flex w-full flex-row items-start justify-between gap-1">
+                                <Button
+                                    variant={metadata?.font === "serif" ? "outline" : "ghost"}
+                                    className="h-fit w-full border py-2"
+                                    onClick={() => {
+                                        if (metadata) {
+                                            setMetadata({
+                                                ...metadata,
+                                                font: "serif"
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <div className="flex flex-col items-center">
+                                        <p className="text-foreground font-serif text-xl font-medium">
+                                            Ag
+                                        </p>
+                                        <p className="text-foreground/40 text-xs font-medium">
+                                            Serif
+                                        </p>
+                                    </div>
+                                </Button>
+                                <Button
+                                    variant={metadata?.font === "sans" ? "outline" : "ghost"}
+                                    className="h-fit w-full border py-2"
+                                    onClick={() => {
+                                        if (metadata) {
+                                            setMetadata({
+                                                ...metadata,
+                                                font: "sans"
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <div className="flex flex-col items-center">
+                                        <p className="text-foreground font-sans text-xl font-medium">
+                                            Ag
+                                        </p>
+                                        <p className="text-foreground/40 text-xs font-medium">
+                                            Sans
+                                        </p>
+                                    </div>
+                                </Button>
+                                <Button
+                                    variant={metadata?.font === "mono" ? "outline" : "ghost"}
+                                    className="h-fit w-full border py-2"
+                                    onClick={() => {
+                                        if (metadata) {
+                                            setMetadata({
+                                                ...metadata,
+                                                font: "mono"
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <div className="flex flex-col items-center">
+                                        <p className="text-foreground font-mono text-xl font-medium">
+                                            Ag
+                                        </p>
+                                        <p className="text-foreground/40 text-xs font-medium">
+                                            Mono
+                                        </p>
+                                    </div>
+                                </Button>
+                            </div>
+
+                            <p className="text-foreground/40 mb-2 mt-3 text-xs font-medium">
+                                Font Size
+                            </p>
+                            <div className="flex w-full flex-row items-center justify-between gap-1 rounded border ">
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        if (metadata) {
+                                            setMetadata({
+                                                ...metadata,
+                                                font_size: metadata.font_size - 1
+                                            });
+                                        }
+                                    }}
+                                >
+                                    -
+                                </Button>
+                                <p className="text-foreground text-sm font-medium">
+                                    {metadata?.font_size} px
+                                </p>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        if (metadata) {
+                                            setMetadata({
+                                                ...metadata,
+                                                font_size: metadata.font_size + 1
+                                            });
+                                        }
+                                    }}
+                                >
+                                    +
+                                </Button>
+                            </div>
+                        </div>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                             onSelect={() => {
                                 setIsBlured(!isBlured);
@@ -215,7 +373,12 @@ export default function Document({ document }: { document?: DocumentType }) {
                 <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
                     {doc?.title}
                 </p>
-                <Editor content={content || ""} setContent={setContent} isBlured={isBlured} />
+                <Editor
+                    content={content || ""}
+                    setContent={setContent}
+                    isBlured={isBlured}
+                    metadata={metadata || {}}
+                />
             </div>
 
             <ConfirmDeleteDialog
@@ -289,22 +452,6 @@ function ConfirmDeleteDialog({
         </Dialog>
     );
 }
-
-const save = async (id: string, content: string, token: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/${id}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ content: content })
-    });
-    if (!res.ok) {
-        toast.error("Error saving document");
-        return;
-    }
-    return res.json();
-};
 
 const deleteDoc = async (id: string, token: string) => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/documents/${id}`, {

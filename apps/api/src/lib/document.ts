@@ -32,6 +32,34 @@ export async function getDocumentByID(id: string, userID: string): Promise<Docum
     return doc as any;
 }
 
+export async function updateDocumentMetadata(
+    id: string,
+    metadata: any
+): Promise<DocumentType | null> {
+    const now = Math.floor(new Date().getTime() / 1000);
+
+    const doc = await db.select().from(documents).where(eq(documents.id, id)).limit(1).execute();
+    if (!doc) {
+        return null;
+    }
+
+    try {
+        await db
+            .update(documents)
+            .set({ metadata: metadata, updated_at: now })
+            .where(eq(documents.id, id))
+            .execute();
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+
+    doc[0].metadata = metadata;
+    doc[0].updated_at = now;
+    doc[0].content = await decrypt(doc[0].content || "");
+    return doc[0] as any;
+}
+
 export async function updateDocumentByID(
     id: string,
     content: string
@@ -61,6 +89,7 @@ export async function updateDocumentByID(
     }
 
     doc[0].content = content;
+    doc[0].updated_at = now;
     return doc[0] as any;
 }
 
@@ -87,7 +116,11 @@ export async function createDocument(userID: string, title: string): Promise<Doc
         content: null,
         owner_id: userID,
         created_at: now,
-        updated_at: now
+        updated_at: now,
+        metadata: {
+            font: "serif",
+            font_size: 18
+        }
     };
     try {
         await db.insert(documents).values(doc).execute();
