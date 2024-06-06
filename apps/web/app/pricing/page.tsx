@@ -11,6 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import StripeClimateIcon from "@/public/icons/stripe-climate.svg";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata | null> {
+    return {
+        title: "Diary Pricing"
+    };
+}
 
 export default function Pricing() {
     return (

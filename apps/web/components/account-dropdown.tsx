@@ -26,7 +26,8 @@ import {
     HelpCircleIcon,
     LogOutIcon,
     MoonIcon,
-    SettingsIcon
+    SettingsIcon,
+    StarIcon
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -115,6 +116,12 @@ export default function AccountDropdown() {
                     >
                         <ChatBubbleIcon className="mr-2 h-[1rem] w-[1rem]" />
                         Feedback
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/changelog">
+                            <StarIcon className="mr-2 h-[1rem] w-[1rem]" />
+                            Changelog
+                        </Link>
                     </DropdownMenuItem>
                     {user?.publicMetadata.plan === "free" && (
                         <>

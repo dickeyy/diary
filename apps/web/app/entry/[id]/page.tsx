@@ -6,7 +6,6 @@ import useClerkSWR from "@/lib/clerk-swr";
 import useDocumentStore from "@/stores/document-store";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 export default function Page({ params }: { params: { id: string } }) {
     const { data, error } = useClerkSWR(

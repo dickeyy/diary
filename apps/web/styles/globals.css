@@ -112,7 +112,7 @@
 }
 
 .blog-content > pre {
-    @apply bg-secondary text-card-foreground rounded-lg border p-3 text-sm shadow-sm;
+    @apply bg-foreground/10 text-card-foreground rounded-lg border p-3 text-sm shadow-sm;
 }
 
 .blog-content > pre > code {
@@ -120,7 +120,11 @@
 }
 
 .blog-content > p > code {
-    @apply bg-secondary text-card-foreground rounded-[0.3rem] border px-1 text-sm;
+    @apply bg-foreground/10 text-card-foreground rounded-[0.3rem] border px-1 text-sm;
+}
+
+.blog-content > ul > li > code {
+    @apply bg-foreground/10 text-card-foreground rounded-[0.3rem] border px-1 text-sm;
 }
 
 .blog-content > blockquote {
@@ -144,7 +148,7 @@
 }
 
 .blog-content > hr {
-    @apply border-primary/10 my-4;
+    @apply border-primary/10 mt-4;
 }
 
 .blog-content > p {

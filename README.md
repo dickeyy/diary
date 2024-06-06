@@ -10,6 +10,10 @@ A private and secure place to keep your thoughts.
 - Open Source: 100% open source and free to use
 - Self Hostable: Run your own instance and get all Plus features fo free
 
+## Changelog
+
+You can find the changelog [here](https://diary.kyle.so/changelog).
+
 ## Self Hosting 
 Coming soon...
 

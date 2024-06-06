@@ -2,7 +2,14 @@
 
 import Spinner from "@/components/ui/spinner";
 import { RedirectToSignIn, useAuth, useUser } from "@clerk/nextjs";
+import { Metadata } from "next";
 import { useEffect, useState } from "react";
+
+export async function generateMetadata(): Promise<Metadata | null> {
+    return {
+        title: "Diary - Billing"
+    };
+}
 
 export default function Upgrade() {
     const { isSignedIn, isLoaded } = useAuth();
