@@ -1,7 +1,6 @@
 # What's New?
 
-Keep track of all the changes made to Diary. We try to keep this as up-to-date and informative as
-possible.
+Keep track of all the changes made to Diary.
 
 ---
 
