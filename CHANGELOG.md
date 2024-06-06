@@ -2,8 +2,6 @@
 
 See also: [Web version](https://diary.kyle.so/changelog)
 
----
-
 ## [v0.2.5-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.5-beta) - June 5, 2024
 
 ### Added
@@ -23,8 +21,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Fix a warning about a `ref` being passed to `PlateContent`.
     ([`d204386`](https://github.com/dickeyy/diary/commit/d204386))
 
----
-
 ## [v0.2.4-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.4-beta) - June 4, 2024
 
 ### Added
@@ -35,7 +31,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Add UI to change document font and size.
     ([`2a6a7ad`](https://github.com/dickeyy/diary/commit/2a6a7ad))
 
----
 
 ## [v0.2.3-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.3-beta) - June 3, 2024
 
@@ -59,7 +54,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Fix a z-index bug causing the document navbar to overlap the sidebar.
     ([`d54d904`](https://github.com/dickeyy/diary/commit/d54d904))
 
----
 
 ## [v0.2.2-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.2-beta) - June 2, 2024
 
@@ -73,7 +67,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Remove test file `websockets.tsx`.
     ([`4772a07`](https://github.com/dickeyy/diary/commit/4772a07))
 
----
 
 ## [v0.2.1-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.1-beta) - June 2, 2024
 
@@ -100,7 +93,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Remove success toasts for entry creation and deletion.
     ([`e802a34`](https://github.com/dickeyy/diary/commit/e802a34))
 
----
 
 ## [v0.2.0-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.0-beta) - June 1, 2024
 
@@ -119,7 +111,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
     ([`e7ab9a1`](https://github.com/dickeyy/diary/commit/e7ab9a1))
 -   General bug fixes. ([`e7ab9a1`](https://github.com/dickeyy/diary/commit/e7ab9a1))
 
----
 
 ## [v0.1.0-beta](https://github.com/dickeyy/diary/releases/tag/Beta) - May 31, 2024\_
 
