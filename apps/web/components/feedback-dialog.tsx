@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/nextjs";
 import { useLogSnag } from "@logsnag/next";
 import Spinner from "./ui/spinner";
+import posthog from "posthog-js";
 
 const formSchema = z.object({
     messsage: z
@@ -77,6 +78,8 @@ export default function FeedbackDialog({
             },
             notify: true
         });
+
+        posthog.capture("feedback_submitted");
     }
 
     return (
