@@ -12,7 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { SunIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, SunIcon } from "@radix-ui/react-icons";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useState } from "react";
 import {
@@ -27,6 +27,7 @@ import {
 import { useTheme } from "next-themes";
 import posthog from "posthog-js";
 import { useLogSnag } from "@logsnag/next";
+import FeedbackDialog from "./feedback-dialog";
 
 export default function Navbar({
     active
@@ -103,6 +104,7 @@ function AccountDropdown({ user }: { user: any }) {
     const { clearUserId } = useLogSnag();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
+    const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
 
     return (
         <>
@@ -167,6 +169,14 @@ function AccountDropdown({ user }: { user: any }) {
                             Support
                         </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            setFeedbackDialogOpen(true);
+                        }}
+                    >
+                        <ChatBubbleIcon className="mr-2 h-[1rem] w-[1rem]" />
+                        Feedback
+                    </DropdownMenuItem>
                     {user?.publicMetadata.plan === "free" && (
                         <>
                             <DropdownMenuSeparator />
@@ -199,6 +209,7 @@ function AccountDropdown({ user }: { user: any }) {
                 isOpen={acctSettingsDialogOpen}
                 onStateChange={setAcctSettingsDialogOpen}
             />
+            <FeedbackDialog isOpen={feedbackDialogOpen} onStateChange={setFeedbackDialogOpen} />
         </>
     );
 }
