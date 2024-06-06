@@ -47,13 +47,15 @@ export default function Document({ document }: { document?: DocumentType }) {
     const [isSaving, setIsSaving] = useState(false);
     const [wordCount, setWordCount] = useState(
         doc?.content
-            ? JSON.parse(doc.content).map(
-                  (block: any) =>
-                      block.children
-                          .map((child: any) => child.text)
-                          .join(" ")
-                          .split(" ").length
-              )
+            ? JSON.parse(doc.content)
+                  .map(
+                      (block: any) =>
+                          block.children
+                              .map((child: any) => child.text)
+                              .join(" ")
+                              .split(" ").length
+                  )
+                  .reduce((a: any, b: any) => a + b, 0)
             : 0
     );
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);

@@ -2,7 +2,6 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { getPolicyData } from "@/lib/md-processor";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata | null> {
     return {
