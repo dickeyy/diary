@@ -10,8 +10,14 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { UserProfile, useAuth, useUser } from "@clerk/nextjs";
-import { DotsHorizontalIcon, SunIcon } from "@radix-ui/react-icons";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { ChatBubbleIcon, DotsHorizontalIcon, SunIcon } from "@radix-ui/react-icons";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription
+} from "@/components/ui/dialog";
 import { useState } from "react";
 import {
     ArrowUpCircleIcon,
@@ -27,6 +33,7 @@ import Link from "next/link";
 import posthog from "posthog-js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useLogSnag } from "@logsnag/next";
+import FeedbackDialog from "./feedback-dialog";
 
 export default function AccountDropdown() {
     const { user } = useUser();
@@ -35,6 +42,7 @@ export default function AccountDropdown() {
     const { clearUserId } = useLogSnag();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
+    const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
 
     return (
         <>
@@ -100,6 +108,14 @@ export default function AccountDropdown() {
                             Support
                         </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            setFeedbackDialogOpen(true);
+                        }}
+                    >
+                        <ChatBubbleIcon className="mr-2 h-[1rem] w-[1rem]" />
+                        Feedback
+                    </DropdownMenuItem>
                     {user?.publicMetadata.plan === "free" && (
                         <>
                             <DropdownMenuSeparator />
@@ -132,6 +148,7 @@ export default function AccountDropdown() {
                 isOpen={acctSettingsDialogOpen}
                 onStateChange={setAcctSettingsDialogOpen}
             />
+            <FeedbackDialog isOpen={feedbackDialogOpen} onStateChange={setFeedbackDialogOpen} />
         </>
     );
 }
