@@ -11,11 +11,7 @@ export async function generateMetadata(): Promise<Metadata | null> {
 }
 
 export default async function Page() {
-    const data = await getPolicyData("changelog");
-
-    if (!data) {
-        notFound();
-    }
+    const data = await getPolicyData("cl");
 
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
