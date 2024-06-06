@@ -100,7 +100,7 @@
 }
 
 .blog-content > h3 {
-    @apply text-xl font-bold;
+    @apply text-foreground font-serif text-xl font-bold;
 }
 
 .blog-content > ol {
@@ -165,4 +165,12 @@
 
 .blog-content > ul > li > a {
     @apply text-primary/60 hover:text-primary underline transition-all duration-150 ease-in-out;
+}
+
+.blog-content > h2 > a {
+    @apply text-primary hover:text-primary transition-all duration-150 ease-in-out hover:underline;
+}
+
+.blog-content > ul > li > a > code {
+    @apply bg-foreground/10 text-card-foreground/80 hover:text-foreground rounded-[0.3rem] border px-1 font-mono text-[14px];
 }

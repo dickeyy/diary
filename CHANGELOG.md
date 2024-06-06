@@ -1,6 +1,6 @@
-# What's New?
+# Changelog
 
-Keep track of all the changes made to Diary.
+See also: [Web version](https://diary.kyle.so/changelog)
 
 ---
 

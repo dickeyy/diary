@@ -6,13 +6,13 @@ A private and secure place to keep your thoughts.
 - Secure: All data is encrypted at rest and in transit
 - Private: Only you can access your data
 - Simple: Easy to use and distraction free
-- Fast: Instantly dump your thoughts
+- Fast: Instantly dump your thoughts wherever whenever
 - Open Source: 100% open source and free to use
 - Self Hostable: Run your own instance and get all Plus features fo free
 
 ## Changelog
 
-You can find the changelog [here](https://diary.kyle.so/changelog).
+You can find the changelog [here](./CHANGELOG.md) or [here](https://diary.kyle.so/changelog).
 
 ## Self Hosting 
 Coming soon...
