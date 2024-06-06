@@ -27,7 +27,6 @@ import useWebSocket from "react-use-websocket";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
-    const [token, setToken] = useState("");
 
     // ws stuff
     const [socketUrl, setSocketUrl] = useState(
@@ -71,36 +70,33 @@ export default function Document({ document }: { document?: DocumentType }) {
             ? "just now"
             : ms(new Date().getTime() - (doc?.created_at as any) * 1000) + " ago";
 
-    // on mount, get the token
-    useEffect(() => {
-        getToken().then((token: any) => {
-            setToken(token);
-        });
-    }, [getToken]);
-
     // Function to save the content
     const saveContent = useCallback(
         debounce(() => {
-            if (token.length > 0) {
-                if (content !== doc?.content) {
-                    setIsSaving(true);
-                    sendJsonMessage({
-                        message: "update content",
-                        data: {
-                            doc_id: doc?.id || "",
-                            content_to_save: content ? content : ""
-                        },
-                        token: token || ""
+            getToken()
+                .then((token: any) => {
+                    if (content !== doc?.content) {
+                        setIsSaving(true);
+                        sendJsonMessage({
+                            message: "update content",
+                            data: {
+                                doc_id: doc?.id || "",
+                                content_to_save: content ? content : ""
+                            },
+                            token: token || ""
+                        });
+                    } else {
+                        setIsSaving(false);
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    toast.error("Error saving document", {
+                        description:
+                            "Something went wrong while trying to authenticate. Please try again.",
+                        duration: 5000
                     });
-                } else {
-                    setIsSaving(false);
-                }
-            } else {
-                getToken().then((token: any) => {
-                    setToken(token);
-                    saveContent();
                 });
-            }
 
             if (content) {
                 const blocks = JSON.parse(content);
@@ -126,23 +122,28 @@ export default function Document({ document }: { document?: DocumentType }) {
     // function to save the metadata
     const saveMetadata = useCallback(
         debounce(() => {
-            if (token.length > 0) {
-                if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
-                    setIsSaving(true);
-                    sendJsonMessage({
-                        message: "update metadata",
-                        data: {
-                            doc_id: doc?.id || "",
-                            metadata: metadata
-                        },
-                        token: token || ""
+            getToken()
+                .then((token: any) => {
+                    if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
+                        setIsSaving(true);
+                        sendJsonMessage({
+                            message: "update metadata",
+                            data: {
+                                doc_id: doc?.id || "",
+                                metadata: metadata
+                            },
+                            token: token || ""
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    toast.error("Error saving document", {
+                        description:
+                            "Something went wrong while trying to authenticate. Please try again.",
+                        duration: 5000
                     });
-                }
-            } else {
-                getToken().then((token: any) => {
-                    setToken(token);
                 });
-            }
         }, 1000), // Adjust the debounce delay as needed
         [metadata, doc?.metadata]
     );
@@ -198,6 +199,7 @@ export default function Document({ document }: { document?: DocumentType }) {
         return () => saveContent.cancel();
     }, [content, saveContent, doc?.content]);
 
+    // Call saveMetadata whenever metadata changes
     useEffect(() => {
         if (JSON.stringify(metadata) !== JSON.stringify(doc?.metadata)) {
             saveMetadata();
