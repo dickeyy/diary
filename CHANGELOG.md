@@ -6,7 +6,7 @@ See also: [Web version](https://diary.kyle.so/changelog)
 
 ### Added
 
--   Add [LogSnag](https://logsnag.com/) for push notifications and easy insights about core events.
+-   Add [LogSnag](https://logsnag.com/) for easy insights.
     ([`ea15dde`](https://github.com/dickeyy/diary/commit/ea15dde))
 -   Add a feedback dialog and form utilizing LogSnag.
     ([`fbf9e6f`](https://github.com/dickeyy/diary/commit/fbf9e6f))
