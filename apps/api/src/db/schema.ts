@@ -16,7 +16,7 @@ export const users = pgTable("users", {
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
-    posts: many(documents)
+    posts: many(documents) // i accidentally called this "posts" instead of "documents", but its too late now so just ignore it lol
 }));
 
 export const documents = pgTable("documents", {
