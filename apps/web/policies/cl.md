@@ -121,6 +121,6 @@ Keep track of all the changes made to Diary.
 
 ---
 
-## [v0.1.0-beta](https://github.com/dickeyy/diary/releases/tag/Beta) - May 31, 2024\_
+## [v0.1.0-beta](https://github.com/dickeyy/diary/releases/tag/Beta) - May 31, 2024
 
 _First release._ ([`55087c2`](https://github.com/dickeyy/diary/commit/55087c2))
