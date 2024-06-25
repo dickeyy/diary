@@ -26,6 +26,9 @@ app.use(
 );
 
 // Routes
+app.get("/", () => {
+    return { message: "hey" };
+});
 app.use(auth); // /auth/*
 app.use(docs); // /documents/*
 app.use(stripe); // /stripe/*
