@@ -96,12 +96,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
             <html lang="en" suppressHydrationWarning>
                 <head>
-                    {/* it has to be in the head idk */}
-                    <PlausibleProvider
-                        domain="diary.kyle.so"
-                        customDomain="https://analytics.kyle.so"
-                        selfHosted
-                    />
+                    <script
+                        defer
+                        data-domain="diary.kyle.so"
+                        src="https://analytics.kyle.so/js/script.tagged-events.js"
+                    ></script>
                 </head>
 
                 <body
