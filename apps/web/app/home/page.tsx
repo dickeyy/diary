@@ -3,11 +3,13 @@
 import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import posthog from "posthog-js";
 import Navbar from "@/components/navbar";
 import { Badge } from "@/components/ui/badge";
+import { usePlausible } from "next-plausible";
 
 export default function Page() {
+    const plausible = usePlausible();
+
     return (
         <div className="flex min-h-screen flex-col items-center justify-center overflow-y-hidden ">
             <Navbar active="home" />
@@ -24,7 +26,7 @@ export default function Page() {
                         href="https://kyle.so"
                         target="_blank"
                         className="text-foreground/20 hover:text-foreground text-[18px] italic transition-all duration-150 hover:underline"
-                        onClick={() => posthog.capture("home_page_portfolio_link_click")}
+                        onClick={() => plausible("home_page_portfolio_link_click")}
                     >
                         kyle.so
                     </Link>

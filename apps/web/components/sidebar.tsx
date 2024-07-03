@@ -11,15 +11,17 @@ import { toast } from "sonner";
 import { createDocument, fetchAllDocuments } from "@/lib/doc-funcs";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
-import posthog from "posthog-js";
 import { MenuIcon } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { usePlausible } from "next-plausible";
 
 export default function Sidebar() {
     const { documents } = useDocumentStore();
     const router = useRouter();
     const { getToken } = useAuth();
     const { data, error } = useClerkSWR(`${process.env.NEXT_PUBLIC_API_URL}/documents/all`);
+    const plausible = usePlausible();
+
     const [isSideOpen, setIsSideOpen] = useState(false);
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function Sidebar() {
                                 selectedDocument: res.documents[0]
                             });
                             setIsSideOpen(false);
-                            posthog.capture("document_created");
+                            plausible("document_created");
                             router.push(`/entry/${res.documents[0].id}`);
                         });
                     }

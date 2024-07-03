@@ -22,11 +22,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
-import posthog from "posthog-js";
 import useWebSocket from "react-use-websocket";
+import { usePlausible } from "next-plausible";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
+    const plausible = usePlausible();
 
     // ws stuff
     const [socketUrl, setSocketUrl] = useState(
@@ -207,13 +208,13 @@ export default function Document({ document }: { document?: DocumentType }) {
             saveMetadata();
 
             if (metadata?.font_size !== doc?.metadata?.font_size) {
-                posthog.capture("document_font_size_change");
+                plausible("document_font_size_change");
             }
         }
 
         // Cancel the debounce on component unmount
         return () => saveMetadata.cancel();
-    }, [metadata, doc?.metadata, saveMetadata]);
+    }, [metadata, doc?.metadata, saveMetadata, plausible]);
 
     return (
         <div className="col-span-1 flex min-h-screen w-full flex-col items-start justify-start pt-4">
@@ -243,7 +244,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
-                                            posthog.capture("document_font_family_change");
+                                            plausible("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "serif"
@@ -265,7 +266,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
-                                            posthog.capture("document_font_family_change");
+                                            plausible("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "sans"
@@ -287,7 +288,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                                     className="h-fit w-full border py-2"
                                     onClick={() => {
                                         if (metadata) {
-                                            posthog.capture("document_font_family_change");
+                                            plausible("document_font_family_change");
                                             setMetadata({
                                                 ...metadata,
                                                 font: "mono"
@@ -345,7 +346,7 @@ export default function Document({ document }: { document?: DocumentType }) {
                         <DropdownMenuItem
                             onSelect={() => {
                                 setIsBlured(!isBlured);
-                                posthog.capture("document_blur");
+                                plausible("document_blur");
                             }}
                         >
                             {isBlured ? (
@@ -410,6 +411,7 @@ function ConfirmDeleteDialog({
 }) {
     const { getToken } = useAuth();
     const router = useRouter();
+    const plausible = usePlausible();
 
     const dd = async () => {
         getToken().then((token: any) => {
@@ -421,7 +423,7 @@ function ConfirmDeleteDialog({
                     })
                 });
                 // set the selected doc to the next doc in the array
-                posthog.capture("document_deleted");
+                plausible("document_deleted");
                 const nextDoc = useDocumentStore.getState().documents[0];
                 if (nextDoc) {
                     useDocumentStore.setState({ selectedDocument: nextDoc });

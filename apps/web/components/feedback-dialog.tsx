@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/nextjs";
 import { useLogSnag } from "@logsnag/next";
 import Spinner from "./ui/spinner";
-import posthog from "posthog-js";
+import { usePlausible } from "next-plausible";
 
 const formSchema = z.object({
     messsage: z
@@ -47,6 +47,7 @@ export default function FeedbackDialog({
 }) {
     const { user } = useUser();
     const { track } = useLogSnag();
+    const plausible = usePlausible();
 
     const [feedbackType, setFeedbackType] = useState<"Bug" | "Idea" | "Other" | null>(null);
 
@@ -79,7 +80,7 @@ export default function FeedbackDialog({
             notify: true
         });
 
-        posthog.capture("feedback_submitted");
+        plausible("feedback_submitted");
     }
 
     return (

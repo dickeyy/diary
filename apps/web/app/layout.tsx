@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/sonner";
 import { Metadata } from "next";
-import PHProvider from "@/components/posthog-provider";
+import PlausibleProvider from "next-plausible";
 import Providers from "@/components/providers";
 
 const fontSans = FontSans({
@@ -95,7 +95,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <Providers>
             <html lang="en" suppressHydrationWarning>
-                <head />
+                <head>
+                    {/* it has to be in the head idk */}
+                    <PlausibleProvider
+                        domain="diary.kyle.so"
+                        customDomain="https://analytics.kyle.so"
+                        selfHosted
+                    />
+                </head>
 
                 <body
                     className={cn(

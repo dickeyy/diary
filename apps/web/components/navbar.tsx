@@ -26,9 +26,9 @@ import {
     StarIcon
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import posthog from "posthog-js";
 import { useLogSnag } from "@logsnag/next";
 import FeedbackDialog from "./feedback-dialog";
+import { usePlausible } from "next-plausible";
 
 export default function Navbar({
     active
@@ -103,6 +103,7 @@ function AccountDropdown({ user }: { user: any }) {
     const { signOut } = useAuth();
     const { setTheme, theme } = useTheme();
     const { clearUserId } = useLogSnag();
+    const plausible = usePlausible();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
     const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
@@ -202,7 +203,7 @@ function AccountDropdown({ user }: { user: any }) {
                     <DropdownMenuItem
                         className="focus:bg-red-500/20"
                         onSelect={() => {
-                            posthog.capture("sign_out");
+                            plausible("sign_out");
                             clearUserId();
                             signOut();
                         }}

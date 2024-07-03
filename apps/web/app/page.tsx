@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import posthog from "posthog-js";
 import { useEffect } from "react";
 import Navbar from "../components/navbar";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import TypingText from "@/components/typing-text";
+import { usePlausible } from "next-plausible";
 
 export default function HomePage() {
     const { isLoaded, isSignedIn } = useAuth();
+    const plausible = usePlausible();
 
     useEffect(() => {
         if (isSignedIn && isLoaded) {
-            posthog.capture("home_page_authed_redirect");
+            plausible("home_page_authed_redirect");
             redirect("/entry");
         }
     }, [isSignedIn, isLoaded]);
@@ -79,6 +79,8 @@ export default function HomePage() {
 }
 
 const ExpandingTitle = () => {
+    const plausible = usePlausible();
+
     const expandVariants = {
         hidden: { width: 0, opacity: 0 },
         visible: {
@@ -105,7 +107,7 @@ const ExpandingTitle = () => {
                     href="https://kyle.so"
                     target="_blank"
                     className="hover:text-foreground transition-all duration-150 hover:underline"
-                    onClick={() => posthog.capture("home_page_portfolio_link_click")}
+                    onClick={() => plausible("home_page_portfolio_link_click")}
                 >
                     kyle.so
                 </Link>

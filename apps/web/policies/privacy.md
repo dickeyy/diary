@@ -43,14 +43,15 @@ Users have the following rights regarding their data:
 
 ## 6. Cookies and Tracking
 
-We use PostHog for anonymous analytics tracking to understand how users interact with the platform.
+We use Plausible for anonymous analytics tracking to understand how users interact with the
+platform.
 
 ## 7. Third-Party Services
 
 We use the following third-party services:
 
 -   **Stripe:** For payment processing ([Stripe Privacy Policy](https://stripe.com/privacy)).
--   **PostHog:** For analytics ([PostHog Privacy Policy](https://posthog.com/privacy)).
+-   **Plausible:** For analytics ([Plausible Privacy Policy](https://plausible.io/privacy)).
 -   **Clerk:** For authentication ([Clerk Privacy Policy](https://clerk.com/privacy)).
 
 ## 8. Data Retention

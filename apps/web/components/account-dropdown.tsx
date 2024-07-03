@@ -31,16 +31,17 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import posthog from "posthog-js";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useLogSnag } from "@logsnag/next";
 import FeedbackDialog from "./feedback-dialog";
+import { usePlausible } from "next-plausible";
 
 export default function AccountDropdown() {
     const { user } = useUser();
     const { signOut } = useAuth();
     const { setTheme, theme } = useTheme();
     const { clearUserId } = useLogSnag();
+    const plausible = usePlausible();
 
     const [acctSettingsDialogOpen, setAcctSettingsDialogOpen] = useState(false);
     const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
@@ -141,7 +142,7 @@ export default function AccountDropdown() {
                     <DropdownMenuItem
                         className="focus:bg-red-500/20"
                         onSelect={() => {
-                            posthog.capture("sign_out");
+                            plausible("sign_out");
                             clearUserId();
                             signOut();
                         }}
