@@ -4,6 +4,29 @@ Keep track of all the changes made to Diary.
 
 ---
 
+## [v0.2.6-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.6-beta) - June 6, 2024
+
+### Added
+
+-   Add Plausible for analytics tracking.
+    ([`9684521`](https://github.com/dickeyy/diary/commit/9684521))
+-   Add some animations on the home page.
+    ([`307ca3b`](https://github.com/dickeyy/diary/commit/307ca3b))
+-   Add configuration for [Fly.io](https://fly.io), for API hosting.
+    [`69268ee`](https://github.com/dickeyy/diary/commit/69268ee)
+
+### Changed
+
+-   Updated the privacy policy for the new analytics provider.
+    ([`9684521`](https://github.com/dickeyy/diary/commit/9684521))
+
+### Removed
+
+-   Remove all `posthog` references and integrations.
+    ([`9684521`](https://github.com/dickeyy/diary/commit/9684521))
+
+---
+
 ## [v0.2.5-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.5-beta) - June 5, 2024
 
 ### Added
