@@ -6,6 +6,7 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 import { Badge } from "@/components/ui/badge";
 import { usePlausible } from "next-plausible";
+import ProductHuntEmbed from "@/components/product-hunt-embed";
 
 export default function Page() {
     const plausible = usePlausible();
@@ -43,6 +44,9 @@ export default function Page() {
                     <Button variant={"outline"} className="w-full" asChild>
                         <Link href="/sign-in">Sign in</Link>
                     </Button>
+                </div>
+                <div className="mt-8">
+                    <ProductHuntEmbed />
                 </div>
             </div>
 

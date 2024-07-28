@@ -10,6 +10,7 @@ import Navbar from "../components/navbar";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { usePlausible } from "next-plausible";
+import ProductHuntEmbed from "@/components/product-hunt-embed";
 
 export default function HomePage() {
     const { isLoaded, isSignedIn } = useAuth();
@@ -63,6 +64,15 @@ export default function HomePage() {
                     <Button variant={"outline"} className="w-full" asChild>
                         <Link href="/sign-in">Sign in</Link>
                     </Button>
+                </motion.div>
+
+                <motion.div
+                    className="mt-8"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, ease: "easeInOut", delay: 0.75 }}
+                >
+                    <ProductHuntEmbed />
                 </motion.div>
             </div>
 

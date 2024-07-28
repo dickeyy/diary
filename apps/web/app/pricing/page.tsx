@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import StripeClimateIcon from "@/public/icons/stripe-climate.svg";
 import { Metadata } from "next";
+import ProductHuntEmbed from "@/components/product-hunt-embed";
 
 export async function generateMetadata(): Promise<Metadata | null> {
     return {
