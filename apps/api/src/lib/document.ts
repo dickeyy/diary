@@ -93,6 +93,37 @@ export async function updateDocumentByID(
     return doc[0] as any;
 }
 
+export async function updateDocumentTitle(id: string, title: string): Promise<DocumentType | null> {
+    const now = Math.floor(new Date().getTime() / 1000);
+
+    const doc = await db.select().from(documents).where(eq(documents.id, id)).limit(1).execute();
+    if (!doc) {
+        return null;
+    }
+
+    try {
+        if (title.length === 0) {
+            title = "Untitled";
+        } else if (title.length > 255) {
+            title = title.substring(0, 255);
+        }
+
+        await db
+            .update(documents)
+            .set({ title: title, updated_at: now })
+            .where(eq(documents.id, id))
+            .execute();
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+
+    doc[0].title = title;
+    doc[0].updated_at = now;
+    doc[0].content = await decrypt(doc[0].content || "");
+    return doc[0] as any;
+}
+
 export async function deleteDocumentByID(id: string, userID: string): Promise<boolean> {
     try {
         await db

@@ -40,7 +40,6 @@ export default function Page({ params }: { params: { id: string } }) {
     return (
         <div className="flex h-full w-full items-center justify-center p-4 pb-8">
             <Document document={document} />
-            {/* <WebSocketDemo /> */}
         </div>
     );
 }

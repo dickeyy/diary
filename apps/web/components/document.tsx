@@ -16,7 +16,7 @@ import ms from "ms";
 import { EyeIcon, EyeOffIcon, Trash2Icon } from "lucide-react";
 import { debounce, get } from "lodash";
 import type { DocumentType } from "@/types/Document";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import useDocumentStore from "@/stores/document-store";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -24,10 +24,12 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader } from "@/components/
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 import useWebSocket from "react-use-websocket";
 import { usePlausible } from "next-plausible";
+import { Input } from "./ui/input";
 
 export default function Document({ document }: { document?: DocumentType }) {
     const { getToken } = useAuth();
     const plausible = usePlausible();
+    const { user } = useUser();
 
     // ws stuff
     const [socketUrl, setSocketUrl] = useState(
@@ -43,6 +45,7 @@ export default function Document({ document }: { document?: DocumentType }) {
 
     const [doc, setDoc] = useState(document);
     const [content, setContent] = useState(doc?.content);
+    const [title, setTitle] = useState(doc?.title);
     const [metadata, setMetadata] = useState(doc?.metadata);
 
     const [isSaving, setIsSaving] = useState(false);
@@ -151,6 +154,35 @@ export default function Document({ document }: { document?: DocumentType }) {
         [metadata, doc?.metadata]
     );
 
+    // save title
+    const saveTitle = useCallback(
+        debounce(() => {
+            getToken()
+                .then((token: any) => {
+                    if (title !== doc?.title) {
+                        setIsSaving(true);
+                        sendJsonMessage({
+                            message: "update title",
+                            data: {
+                                doc_id: doc?.id || "",
+                                title: title
+                            },
+                            token: token || ""
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    toast.error("Error saving document", {
+                        description:
+                            "Something went wrong while trying to authenticate. Please try again.",
+                        duration: 5000
+                    });
+                });
+        }, 1000), // Adjust the debounce delay as needed
+        [title, doc?.title]
+    );
+
     // handle websocket messages
     useEffect(() => {
         if (lastMessage !== null) {
@@ -161,6 +193,17 @@ export default function Document({ document }: { document?: DocumentType }) {
                     setDocUpdatedAt(new Date().getTime());
                     setSinceUpdate("just now");
                     setDoc(JSON.parse(lastMessage.data).doc);
+
+                    // set the active doc to the new doc and update the documents list to replace the old doc with the new doc
+                    useDocumentStore.setState({
+                        documents: useDocumentStore.getState().documents.map((d) => {
+                            if (d.id === doc?.id) {
+                                return JSON.parse(lastMessage.data).doc;
+                            } else {
+                                return d;
+                            }
+                        })
+                    });
                 }
             } else if (JSON.parse(lastMessage.data).message === "error") {
                 toast.error("Error saving document", {
@@ -215,6 +258,16 @@ export default function Document({ document }: { document?: DocumentType }) {
         // Cancel the debounce on component unmount
         return () => saveMetadata.cancel();
     }, [metadata, doc?.metadata, saveMetadata, plausible]);
+
+    // Call saveTitle whenever title changes
+    useEffect(() => {
+        if (title !== doc?.title) {
+            saveTitle();
+        }
+
+        // Cancel the debounce on component unmount
+        return () => saveTitle.cancel();
+    }, [title, doc?.title, saveTitle]);
 
     return (
         <div className="col-span-1 flex min-h-screen w-full flex-col items-start justify-start pt-4">
@@ -380,9 +433,18 @@ export default function Document({ document }: { document?: DocumentType }) {
                 </DropdownMenu>
             </nav>
             <div className="mt-[2rem] flex w-full flex-col items-start justify-start md:mx-auto md:w-full md:max-w-full lg:max-w-[50rem] 2xl:max-w-[60rem]">
-                <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
-                    {doc?.title}
-                </p>
+                {user?.publicMetadata.plan === "free" ? (
+                    <p className="text-foreground/60 text-md mb-4 flex-wrap text-left font-mono font-medium ">
+                        {title}
+                    </p>
+                ) : (
+                    <Input
+                        placeholder="Title"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="text-md text-foreground/60 mb-4 w-full flex-wrap border-0 p-0 text-left font-mono font-medium shadow-none focus-visible:ring-0"
+                    />
+                )}
                 <Editor
                     content={content || ""}
                     setContent={setContent}

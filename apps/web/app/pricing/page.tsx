@@ -41,9 +41,9 @@ export default function Pricing() {
                         features={[
                             "Unlimited entries",
                             "1 daily entry limit",
-                            "Export to .txt",
                             "Blur content on command",
-                            "Private and secure"
+                            "Private and secure",
+                            "Export to .txt - Coming soon"
                         ]}
                         href="/sign-up"
                     />
@@ -51,14 +51,14 @@ export default function Pricing() {
                         title="Plus"
                         price="$4.99"
                         highlight
-                        interval="/ month"
+                        interval="/month"
                         description="For the cool user."
                         features={[
                             "Everything in the starter plan",
-                            "Toggleable entry lock - Coming soon",
-                            "Unlimited daily entries - Coming soon",
-                            "Edit entry titles - Coming soon",
-                            "Export to .pdf - Coming soon"
+                            "Unlimited daily entries",
+                            "Edit entry titles",
+                            "Export to .pdf - Coming soon",
+                            "Toggleable entry lock - Coming soon"
                         ]}
                         href="/upgrade"
                     />

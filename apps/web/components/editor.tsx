@@ -24,7 +24,7 @@ export default function Editor({
             }}
         >
             <PlateContent
-                className={`w-full border-0 p-0 font-light leading-loose shadow-none focus:outline-none focus-visible:border-0 focus-visible:ring-0
+                className={`h-fit w-full border-0 p-0 font-light leading-loose shadow-none focus:outline-none focus-visible:border-0 focus-visible:ring-0
                     ${isBlured ? "blur-[8px]" : ""}
                     ${metadata.font === "serif" ? "font-serif" : metadata.font === "sans" ? "font-sans" : "font-mono"}
                 `}

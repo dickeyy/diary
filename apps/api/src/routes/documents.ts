@@ -5,7 +5,8 @@ import {
     getDocumentByID,
     updateDocumentByID,
     deleteDocumentByID,
-    updateDocumentMetadata
+    updateDocumentMetadata,
+    updateDocumentTitle
 } from "../lib/document";
 import { validateClerkToken } from "../lib/clerk";
 import { decrypt } from "../lib/crypto";
@@ -67,6 +68,31 @@ docs.ws("/ws", {
         } else if (message === "update metadata") {
             if (data.metadata !== undefined) {
                 const doc = await updateDocumentMetadata(data.doc_id, data.metadata);
+                if (!doc) {
+                    ws.send({
+                        message: "error"
+                    });
+                } else {
+                    ws.send({
+                        message: "success",
+                        doc: doc
+                    });
+                }
+            } else {
+                ws.send({
+                    message: "error"
+                });
+            }
+        } else if (message === "update title") {
+            if (data.title !== undefined) {
+                if (user.publicMetadata.plan === "free") {
+                    ws.send({
+                        message: "error"
+                    });
+                    return;
+                }
+
+                const doc = await updateDocumentTitle(data.doc_id, data.title);
                 if (!doc) {
                     ws.send({
                         message: "error"
