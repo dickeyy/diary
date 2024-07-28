@@ -2,7 +2,7 @@
 
 Keep track of all the changes made to Diary.
 
---
+---
 
 ## [v0.2.7-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.7-beta) - July 27, 2024
 
