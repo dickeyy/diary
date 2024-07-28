@@ -2,6 +2,29 @@
 
 See also: [Web version](https://diary.kyle.so/changelog)
 
+## [v0.2.7-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.7-beta) - July 27, 2024
+
+### Added
+
+-   Add a title edit feature to the entry page.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+-   Add the one daily entry limit for Starter plan users.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
+### Changed
+
+-   Change the entry page to use the new title edit feature.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+-   Change the WS endpoint to use the new title edit feature.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd)))
+-   Change the "Coming Soon" features on the pricing page.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
+### Fixed
+
+-   Fix a bug with the position of the user dropdown button on the sidebar.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
 ## [v0.2.6-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.6-beta) - June 6, 2024
 
 ### Added
@@ -52,7 +75,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Add UI to change document font and size.
     ([`2a6a7ad`](https://github.com/dickeyy/diary/commit/2a6a7ad))
 
-
 ## [v0.2.3-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.3-beta) - June 3, 2024
 
 ### Changed
@@ -75,7 +97,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Fix a z-index bug causing the document navbar to overlap the sidebar.
     ([`d54d904`](https://github.com/dickeyy/diary/commit/d54d904))
 
-
 ## [v0.2.2-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.2-beta) - June 2, 2024
 
 ### Fixed
@@ -87,7 +108,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 
 -   Remove test file `websockets.tsx`.
     ([`4772a07`](https://github.com/dickeyy/diary/commit/4772a07))
-
 
 ## [v0.2.1-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.1-beta) - June 2, 2024
 
@@ -114,7 +134,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Remove success toasts for entry creation and deletion.
     ([`e802a34`](https://github.com/dickeyy/diary/commit/e802a34))
 
-
 ## [v0.2.0-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.0-beta) - June 1, 2024
 
 ### Added
@@ -131,7 +150,6 @@ See also: [Web version](https://diary.kyle.so/changelog)
 -   Fix layouts and general containers for landing pages.
     ([`e7ab9a1`](https://github.com/dickeyy/diary/commit/e7ab9a1))
 -   General bug fixes. ([`e7ab9a1`](https://github.com/dickeyy/diary/commit/e7ab9a1))
-
 
 ## [v0.1.0-beta](https://github.com/dickeyy/diary/releases/tag/Beta) - May 31, 2024
 

@@ -2,6 +2,31 @@
 
 Keep track of all the changes made to Diary.
 
+--
+
+## [v0.2.7-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.7-beta) - July 27, 2024
+
+### Added
+
+-   Add a title edit feature to the entry page.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+-   Add the one daily entry limit for Starter plan users.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
+### Changed
+
+-   Change the entry page to use the new title edit feature.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+-   Change the WS endpoint to use the new title edit feature.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd)))
+-   Change the "Coming Soon" features on the pricing page.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
+### Fixed
+
+-   Fix a bug with the position of the user dropdown button on the sidebar.
+    ([`28e03cd`](https://github.com/dickeyy/diary/commit/28e03cd))
+
 ---
 
 ## [v0.2.6-beta](https://github.com/dickeyy/diary/releases/tag/v0.2.6-beta) - June 6, 2024
