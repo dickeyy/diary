@@ -45,9 +45,6 @@ export default function Page() {
                         <Link href="/sign-in">Sign in</Link>
                     </Button>
                 </div>
-                <div className="mt-8">
-                    <ProductHuntEmbed />
-                </div>
             </div>
 
             <Footer />
