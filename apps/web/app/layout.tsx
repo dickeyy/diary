@@ -99,7 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <script
                         defer
                         data-domain="diary.kyle.so"
-                        src="https://analytics.kyle.so/js/script.tagged-events.js"
+                        src="https://a.kyle.so/js/script.tagged-events.js"
                     ></script>
                 </head>
 
