@@ -24,7 +24,7 @@
         "@elysia/cors": "1.4.2",
         "@elysia/openapi": "1.4.15",
         "better-auth": "1.6.25",
-        "csv-parse": "7.0.1",
+        "csv-parse": "7.0.2",
         "drizzle-orm": "0.45.2",
         "elysia": "1.4.29",
         "resend": "6.18.1",
